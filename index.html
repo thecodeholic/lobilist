@@ -2,9 +2,1084 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Lobilist  - jQuery plugin for todo lists. Supports drag & drop issues. Multiple lists with different colors. Support for communication to backend</title>
+
+    <!--Default installation-->
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+    <!--<link rel="stylesheet" href="scripts/font-awesome/css/font-awesome.min.css"/>-->
+
 </head>
 <body>
 
+    <div class="container">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img src="img/logo/lobiadmin-logo-text-32.png" alt="" />
+                    </a>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+
+    <div class="container">
+            <div id="lobilist">
+                <!--Description-->
+                <div id="lobilist-description">
+                    <h1 class="page-header-dashed">Lobilist</h1>
+                    <p class="lead">LobiList is  <b>TODO list</b> jquery plugin exclusively written for <big>LobiAdmin</big>.</p>
+                </div>
+                <!--Features-->
+                <div id="lobilist-features">
+                    <h3>Features</h3>
+                    <ul>
+                        <li>Multiple list support</li>
+                        <li>Load lists and todos by ajax</li>
+                        <li>List style support</li>
+                        <li>Custom Checkboxes</li>
+                        <li>Drag & drop support between lists and between todos also</li>
+                        <li>Ajax support for TODO <b>Add, Edit and Delete</b> actions</li>
+                    </ul>
+                </div>
+                <!--Usage-->
+                <div id="lobilist-usage">
+                    <h3>Usage</h3>
+                    <p><big>LobiList</big> initialization is simple. Just create an empty <code>&lt;div&gt;</code> and call plugin.</p>
+                    <div class="highlight">
+                        <pre>
+<code class="html">&ltdiv id="todo-lists-demo">&lt;/div>
+&lt;script>
+</code>
+<code class="javascript">    $(function(){
+        $('#todo-lists-demo').lobiList({
+            //Options
+        });
+    });</code>
+<code class="html">&lt;/script&gt;</code>
+                        </pre>
+                    </div>
+                    <p><big>LobiList</big> plugin contains 2 internal "classes": <code>LobiList</code> and <code>List</code>.</p>
+                    <p>You can set default options for <code>LobiList</code> and at the same time all <code>Lists</code> will take these options.
+                        But if you want different option for <code>List</code> you can override <code>LobiList</code> option by specifying different option for <code>List</code>.</p>
+                    <div class="highlight">
+                        <pre><code>$('selector').lobiList({
+    //Every list will have default style 'lobilist-info'
+    defaultStyle: 'lobilist-info',
+    lists: [
+        {
+            //This list will have style 'lobilist-danger' instead of 'lobilist-info'
+            defaultStyle: 'lobilist-danger',
+            ...
+        },
+        ... //other lists
+    ]
+});
+</code></pre>
+                    </div>
+                </div>
+                <!--Options-->
+                <div id="lobilist-options">
+                    <h3>Options</h3>
+                    <div class="plugin-documentation plugin-options">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-type">Type</div>
+                            <div class="cell cell-default">Default</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                sortable <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>true</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Enable drag and drop between <i>lists</i> and between <i>TODOs</i>.
+                                <p class="text-warning">This requires <b>jQuery ui sortable plugin</b></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                actions <span class="text-mobile"><code>[Plain Object]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Plain Object</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span>
+                                <div class="highlight">
+                                    <pre><code>actions: {
+    'load' : ''  //Load url,
+    'update': '' //Update url,
+    'insert': '' //Insert url,
+    'delete': '' //Delete url
+}
+</code></pre>
+                                </div>
+                            </div>
+                            <div class="cell cell-descr">
+                                Urls for communicating with server. If not provided TODOs are deleted as soon as page is reloaded.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                lists <span class="text-mobile"><code>[Array]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Array</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>[]</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Array of lists with TODOS
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Options for both <code>LobiList</code> and <code>List</code></h3>
+                    <div class="plugin-documentation plugin-options">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-type">Type</div>
+                            <div class="cell cell-default">Default</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                useCheckboxes <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>true</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Use checkboxes
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                useLobicheck <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>true</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Use custom style checkboxes
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                lobicheckClass <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>"lobicheck-info lobicheck-inversed"</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Custom checkbox classes. Available options: <code>.lobicheck-inversed, .lobicheck-rounded, .lobicheck-* (info|danger|success|inverse|warning)</code>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                removeItemButton <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>true</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Enable or disable remove item button
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                editItemButton <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>true</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Enable or disable edit item button
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                controls <span class="text-mobile"><code>[Array]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Array</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>['edit', 'add', 'remove', 'styleChange']</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Controls on every list.
+                                <ul>
+                                    <li><code>'edit'</code> makes TODO list title editable. Besides edit button, use double click on title to start editing, press enter to finish editing</li>
+                                    <li><code>'add'</code> adds button to every list to create new list</li>
+                                    <li><code>'remove</code> adds button to remove list</li>
+                                    <li><code>'styleChange'</code> adds button to change style of the list</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                defaultStyle <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>'lobilist-default'</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Class for the list. Available options: <code>'lobilist-default', 'lobilist-info', 'lobilist-success', 'lobilist-danger', 'lobilist-warning', 'lobilist-primary'</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>List Options</h3>
+                    <div class="plugin-documentation plugin-options">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-type">Type</div>
+                            <div class="cell cell-default">Default</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                id <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code> random</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Unique id for list. This id will be assigned as attribute.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                title <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>''</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Title of the list
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                items <span class="text-mobile"><code>[Array]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Array</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>[]</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Array of items (todos)
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Item options</h3>
+                    <div class="plugin-documentation plugin-options">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-type">Type</div>
+                            <div class="cell cell-default">Default</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                id <span class="text-mobile"><code>[Integer]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Integer</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default </span> taken from sequence
+                            </div>
+                            <div class="cell cell-descr">
+                                Unique identification of TODO. This <code>id</code> is used when communicating with server and performing actions such as update and delete.
+                                When inserting new TODO, if <code>insert</code> url is provided <code>id</code> must be received from server if not provided id is taken from sequence.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                title <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>''</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Title of the TODO
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                description <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>''</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Description of the TODO
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                dueDate <span class="text-mobile"><code>[String]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>String</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>''</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Due date of the TODO
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                done <span class="text-mobile"><code>[Boolean]</code></span>
+                            </div>
+                            <div class="cell cell-type">
+                                <code>Boolean</code>
+                            </div>
+                            <div class="cell cell-default">
+                                <span class="text-mobile">Default</span> <code>false</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Status of the TODO
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Methods-->
+                <div id="lobilist-methods">
+                    <h3>Methods</h3>
+                    <p>Methods for <code>LobiList</code> can be called in two ways.</p>
+                    <p>1. You can get the instance and call the method</p>
+                    <div class="highlight">
+                        <pre><code class="javascript">//get the LobiList instance
+var instance = $('#todo-lists-demo').data('lobiList');
+//call the methods
+instance.addList({
+    title: 'TODO list',
+    defaultStyle: 'lobilist-danger',
+    useCheckboxes: false,
+    item: [
+        ...
+    ]
+});
+</code></pre>
+                    </div>
+                    <p>2. Or you can call the method directly</p>
+                    <div class="highlight">
+                        <pre><code class="javascript">$('#todo-lists-demo').lobiList('addList', {
+    title: 'TODO list',
+    defaultStyle: 'lobilist-danger',
+    useCheckboxes: false,
+    item: [
+        ...
+    ]
+});
+</code></pre>
+                    </div>
+                    <div class="plugin-documentation plugin-methods">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-params">Parameters</div>
+                            <div class="cell cell-return">Return type</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                addList(listOptions) <span class="text-mobile"> - Return <code>List</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span>
+                                <div><i>listOptions</i> - <code>Plain Object</code>, <code>REQUIRED</code> list options</div>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>List</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Add new list (optionally with TODOs).
+                                <p>Returns just added list instance.</p>
+                                <p>Triggers <code>onAdd</code> event</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                getNextId <span class="text-mobile"> - Return <code>Integer</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>Integer</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Get next id which will be assigned to new TODO
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Methods for <code>List</code></h3>
+                    <div>
+                        <p>1. Grab the <code>List</code> instance from <code>$lists array</code>.</p>
+                        <div class="highlight">
+                            <pre><code>var $lobilist = $('selector').data('lobiList');
+//$lobilist.$lists will contain all lists of List "class" in this list group
+$lobilist.$lists[0].addItem({
+    title: '',
+    description: ''
+});
+</code></pre>
+                        </div>
+                        2. Grab the each list container div which saves its <code>List</code> instance in its <code>data</code> attribute.
+                        <div class="highlight">
+                            <pre><code>$('selector').lobiList({
+    lists: [
+        {
+            id: 'todoList1',
+            title: 'TODO',
+            items: [
+                ...
+            ]
+        }
+    ]
+});
+var $list = $('#todoList1').data('lobiList');
+$list.addItem({
+    title: '',
+    description: ''
+});
+</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="plugin-documentation plugin-methods">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-params">Parameters</div>
+                            <div class="cell cell-return">Return type</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                addItem(item) <span class="text-mobile"> - Return <code>List</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span>
+                                <div><i>item</i> - <code>Plain Object</code>, <code>REQUIRED</code> item options</div>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>List</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Add item. If <code>action.insert</code> url is provided request is sent to the server.
+                                <p>Server respond: <code>{"success": Boolean, "msg": String}</code></p>
+                                <p>If <code>respond.success</code> is true item is added.</p>
+                                Otherwise <big>Lobibox</big> error notification is shown with the message server responded and item is not added.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                updateItem(item) <span class="text-mobile"> - Return <code>List</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span>
+                                <div><i>item</i> - <code>Plain Object</code>, <code>REQUIRED</code> item options</div>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>List</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Update item. If <code>action.update</code> url is provided request is sent to the server.
+                                <p>Server respond: <code>{"success": Boolean, "msg": String}</code></p>
+                                <p>If <code>respond.success</code> is true item is updated. </p>
+                                Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not updated.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                deleteItem(item, discardEvent) <span class="text-mobile"> - Return <code>List</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span>
+                                <div><i>item</i> - <code>Plain Object</code>, <code>REQUIRED</code> item options</div>
+                                <div><i>discardEvent</i> - <code>Boolean</code>, <code>OPTIONAL</code> trigger <code>beforeItemDelete</code> event or not</div>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>List</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Delete item from the list. If <code>action.delete</code> url is provided request is sent to the server.
+                                <p>Server respond: <code>{"success": Boolean, "msg": String}</code></p>
+                                <p>If <code>respond.success</code> is true item is deleted from the list.</p>
+                                Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not deleted.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                saveOrUpdateItem(item) <span class="text-mobile"> - Return <code>List</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span>
+                                <div><i>item</i> - <code>Plain Object</code>, <code>REQUIRED</code> item options</div>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>List</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                If item does not have id, it is considered as new and adds to the list.
+                                If it has id it is updated. If update and insert actions are provided corresponding request is sent to the server
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                startTitleEditing <span class="text-mobile"> - Return <code>LobiPanel</code> - instance</span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>LobiPanel</code> - instance
+                            </div>
+                            <div class="cell cell-descr">
+                                Creates input field to edit panel title
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                cancelTitleEditing <span class="text-mobile"> - Return <code>LobiPanel</code> - instance</span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>LobiPanel</code> - instance
+                            </div>
+                            <div class="cell cell-descr">
+                                Cancel the panel new title and return to previous title when it is changed but not saved
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                finishTitleEditing <span class="text-mobile"> - Return <code>LobiPanel</code> - instance</span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>LobiPanel</code> - instance
+                            </div>
+                            <div class="cell cell-descr">
+                                Finish the panel title editing process and save new title
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                remove <span class="text-mobile"> - Return <code>Integer</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>Integer</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Remove list
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                editItem <span class="text-mobile"> - Return <code>Integer</code></span>
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters</span> <code>none</code>
+                            </div>
+                            <div class="cell cell-return">
+                                <code>Integer</code>
+                            </div>
+                            <div class="cell cell-descr">
+                                Start editing of TODO
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Events-->
+                <div id="lobilist-events">
+                    <h3>Events</h3>
+                    <p>Events can be globally attached to all lists</p>
+                    <div class="highlight">
+                        <pre><code class="language-javascript">$('#todo-lists-demo').lobiList({
+    //This event is triggered when list close button is clicked or <code>.remove</code> method is called on <code>List instance</code>
+    //Return false to prevent removing
+    lists: [
+        ...
+    ],
+    onRemove : function(){
+    }
+});
+</code></pre>
+                    </div>
+                    <p>Or you attach events to single list</p>
+                    <div class="highlight">
+                        <pre><code>$('#todo-lists-demo').lobiList({
+    lists: [
+        {
+            title: '',
+            onRemove : function(){
+            }
+        }
+    ]
+});
+</code></pre>
+                    </div>
+                    <div class="plugin-documentation plugin-events">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-params">Parameters</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onInit
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                When plugin is initialized
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onAdd
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered after list is added
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onRemove
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered before list is removed. Return false to prevent removing
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                afterRemove
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered after list is removed
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                afterRemove
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered before item is added
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onItemAdd
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered before item is added
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                afterItemAdd
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered after item is added
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onItemUpdate
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered before item is updated
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                afterItemUpdate
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered after item is updated
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                onItemDelete
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered before item is removed. Return false to prevent delete
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">
+                                afterItemDelete
+                            </div>
+                            <div class="cell cell-params">
+                                <span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - instance</div>
+                            </div>
+                            <div class="cell cell-descr">
+                                This event is triggered after item is removed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Examples-->
+                <div id="lobilist-examples">
+                    <h3>Examples</h3>
+                    <!--Basic example-->
+                    <div>
+                        <div class="bs-example">
+                            <h4>Basic example</h4>
+                            <div id="todo-lists-demo"></div>
+                        </div>
+                        <div class="highlight">
+                            <pre><code>$('selector').lobiList({
+    lists: [
+        {
+            title: 'TODO',
+            defaultStyle: 'lobilist-info',
+            items: [
+                {
+                    title: 'Floor cool cinders',
+                    description: 'Thunder fulfilled travellers folly, wading, lake.',
+                    dueDate: '2015-01-31'
+                },
+                {
+                    title: 'Periods pride',
+                    description: 'Accepted was mollis',
+                    done: true
+                },
+                {
+                    title: 'Flags better burns pigeon',
+                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                },
+                {
+                    title: 'Accepted was mollis',
+                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                    dueDate: '2015-02-02'
+                }
+            ]
+        },
+        {
+            title: 'DOING',
+            items: [
+                {
+                    title: 'Composed trays',
+                    description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.',
+                },
+                {
+                    title: 'Chic leafy'
+                },
+                {
+                    title: 'Guessed interdum armies chirp writhes most',
+                    description: 'Came champlain live leopards twilight whenever warm read wish squirrel rock.',
+                    dueDate: '2015-02-04',
+                    done: true
+                }
+            ]
+        }
+    ]
+});
+</code></pre>
+                        </div>
+                    </div>
+                    <!--Event handling-->
+                    <div>
+                        <div class="bs-example">
+                            <h4>Event handling</h4>
+                            <button id="todo-lists-initialize-btn" class="btn btn-primary margin-bottom-15">Initialize</button>
+                            <div id='todo-lists-demo-events'></div>
+                        </div>
+                        <div class="highlight">
+                            <pre><code>$('selector').lobiList({
+    onInit : function(){
+        Lobibox.notify('success', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'LobiList is initialized'
+        });
+    },
+    onAdd : function(list){
+        Lobibox.notify('warning', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'List added'
+        });
+    },
+    onRemove : function(list){
+        Lobibox.confirm({
+            msg: 'Are you sure you want to delete the list',
+            callback: function(box, type){
+                if (type === 'yes'){
+                    list.remove(true);
+                }
+            }
+        });
+        return false;
+    },
+    afterRemove : function(){
+        Lobibox.notify('info', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'List after remove'
+        });
+    },
+    onItemAdd : function () {
+        Lobibox.notify('info', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'Before item is added'
+        });
+    },
+    afterItemAdd : function () {
+        Lobibox.notify('info', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'After item is added'
+        });
+    },
+    onItemUpdate : function () {
+        Lobibox.notify('error', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'Before item is updated'
+        });
+    },
+    afterItemUpdate : function () {
+        Lobibox.notify('error', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'After item is updated'
+        });
+    },
+    onItemDelete : function () {
+        Lobibox.notify('warning', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'Before item is deleted'
+        });
+    },
+    afterItemDelete : function () {
+        Lobibox.notify('warning', {
+            size: 'mini',
+            delay: false,
+            sound: false,
+            msg: 'After item is deleted'
+        });
+    },
+    lists: [
+        {
+            title: 'TODO',
+            defaultStyle: 'lobilist-info',
+            items: [
+                {
+                    title: 'Floor cool cinders',
+                    description: 'Thunder fulfilled travellers folly, wading, lake.',
+                    dueDate: '2015-01-31'
+                },
+                {
+                    title: 'Periods pride',
+                    description: 'Accepted was mollis',
+                    done: true
+                },
+                {
+                    title: 'Flags better burns pigeon',
+                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                },
+                {
+                    title: 'Accepted was mollis',
+                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                    dueDate: '2015-02-02'
+                }
+            ]
+        }
+    ]
+});
+</code></pre>
+                        </div>
+                    </div>
+                    <!--Custom controls-->
+                    <div>
+                        <div class="bs-example">
+                            <h4>Custom controls</h4>
+                            <div id="todo-lists-demo-controls"></div>
+                        </div>
+                        <div class="highlight">
+                            <pre><code>$('selector').lobiList({
+    lists: [
+        {
+            title: 'TODO',
+            defaultStyle: 'lobilist-info',
+            controls: ['edit', 'styleChange'],
+            items: [
+                {
+                    title: 'Floor cool cinders',
+                    description: 'Thunder fulfilled travellers folly, wading, lake.',
+                    dueDate: '2015-01-31'
+                }
+            ]
+        },
+        {
+            title: 'Disabled custom checkboxes',
+            defaultStyle: 'lobilist-danger',
+            controls: ['edit', 'add', 'remove'],
+            useLobicheck: false,
+            items: [
+                {
+                    title: 'Periods pride',
+                    description: 'Accepted was mollis',
+                    done: true
+                }
+            ]
+        },
+        {
+            title: 'Controls disabled',
+            controls: false,
+            items: [
+                {
+                    title: 'Composed trays',
+                    description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.',
+                }
+            ]
+        },
+        {
+            title: 'Disabled todo edit/remove',
+            removeItemButton: false,
+            editItemButton: false,
+            items: [
+                {
+                    title: 'Composed trays',
+                    description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.',
+                }
+            ]
+        }
+    ]
+});
+</code></pre>
+                        </div>
+                    </div>
+                    <!--Disabled drag & drop-->
+                    <div>
+                        <div class="bs-example">
+                            <h4>Disabled drag & drop</h4>
+                            <div id="todo-lists-demo-sorting"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!--Default installation-->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-ui.min.js"></script>
+    <script src="lib/jquery/jquery.ui.touch-punch-improved.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

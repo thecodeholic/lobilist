@@ -1,0 +1,38 @@
+{
+  "name": "lobilist",
+  "description": "jQuery plugin for todo lists. Supports drag & drop issues. Multiple lists with different colors. Support for communication to backend",
+  "main": [
+    "dist/lobilist.min.css",
+    "dist/lobilist.min.js"
+  ],
+  "authors": [
+    {
+      "name": "Zura Sekhniashvili",
+      "email": "zurasekhniashvili@gmail.com",
+      "homepage": "https://github.com/arboshiki"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jQuery",
+    "jQuery plugin",
+    "Bootstrap todo lists",
+    "drag & drop todos",
+    "different color todo lists"
+  ],
+  "homepage": "https://github.com/arboshiki/lobilist",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery-ui": "^1.11.4",
+    "jquery-ui-touch-punch-improved": "^0.3.1"
+  }
+}
