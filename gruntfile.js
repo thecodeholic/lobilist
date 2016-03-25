@@ -63,6 +63,12 @@ module.exports = function(grunt){
                         cwd: 'bower_components/bootstrap/dist',
                         src: '**',
                         dest: 'lib/bootstrap'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/lobibox/dist',
+                        src: '**',
+                        dest: 'lib/lobibox'
                     }
                 ]
             },

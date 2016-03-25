@@ -2,6 +2,12 @@
  * Created by Zura on 3/22/2016.
  */
 $(function () {
+    var codes = $('.highlight code');
+    codes.each(function (ind, el) {
+        hljs.highlightBlock(el);
+    });
+
+
     $('#todo-lists-demo-sorting').lobiList({
         sortable: false,
         lists: [

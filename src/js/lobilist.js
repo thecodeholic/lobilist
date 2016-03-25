@@ -20,11 +20,11 @@ $(function(){
 //------------------------------------------------------------------------------
 //----------------PROTOTYPE VARIABLES-------------------------------------------
 //------------------------------------------------------------------------------
-        this.$lobiList                      = $lobiList;
-        this.$el;
-        this.$options                       = options;
-        this.$items;
-        this.$globalOptions                 = $lobiList.$options;
+        this.$lobiList = $lobiList;
+        this.$el = null;
+        this.$options = options;
+        this.$items = [];
+        this.$globalOptions = $lobiList.$options;
 //------------------------------------------------------------------------------
 //-----------------PRIVATE VARIABLES--------------------------------------------
 //------------------------------------------------------------------------------        
@@ -403,21 +403,25 @@ $(function(){
             if (me.$options.useCheckboxes) {
                 $li.append(_createCheckbox());
             }
-            
-            if (me.$options.removeItemButton){
-                $li.append($('<div>', {
-                    'class': 'delete-todo',
-                    html: '<i class="glyphicon glyphicon-remove"></i>'
-                }).click(function () {
-                    me.deleteItem($(this).closest('li').data('lobiListItem'));
-                }));
-            }
+            var $itemControlsDiv = $('<div>',{
+                'class': 'todo-actions'
+            }).appendTo($li);
+
             if (me.$options.editItemButton){
-                $li.append($('<div>', {
-                    'class': 'edit-todo',
+                $itemControlsDiv.append($('<div>', {
+                    'class': 'edit-todo todo-action',
                     html: '<i class="glyphicon glyphicon-pencil"></i>'
                 }).click(function () {
                     me.editItem($(this).closest('li').data('id'));
+                }));
+            }
+
+            if (me.$options.removeItemButton){
+                $itemControlsDiv.append($('<div>', {
+                    'class': 'delete-todo todo-action',
+                    html: '<i class="glyphicon glyphicon-remove"></i>'
+                }).click(function () {
+                    me.deleteItem($(this).closest('li').data('lobiListItem'));
                 }));
             }
             
@@ -445,13 +449,14 @@ $(function(){
 //------------------------------------------------------------------------------
 //----------------PROTOTYPE FUNCTIONS-------------------------------------------
 //------------------------------------------------------------------------------
+        
         /**
          * Add item. If <code>action.insert</code> url is provided request is sent to the server.
          * Server respond: <code>{"success": Boolean, "msg": String}</code>
          * If <code>respond.success</code> is true item is added. 
          * Otherwise <big>Lobibox</big> error notification is shown with the message server responded and item is not added.
          * 
-         * @param {Plain Object} item "item options"
+         * @param {Object} item "item options"
          * @returns {List}
          */
         this.addItem = function(item){
@@ -489,13 +494,14 @@ $(function(){
             }
             return me;
         };
+        
         /**
          * Update item. If <code>action.update</code> url is provided request is sent to the server.
          * Server respond: <code>{"success": Boolean, "msg": String}</code>
          * If <code>respond.success</code> is true item is updated. 
          * Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not updated.
          * 
-         * @param {Plain Object} item "item options"
+         * @param {Object} item "item options"
          * @returns {List}
          */
         this.updateItem = function(item){
@@ -530,13 +536,14 @@ $(function(){
             }
             return me;
         };
+        
         /**
          * Delete item from the list. If <code>action.delete</code> url is provided request is sent to the server.
          * Server respond: <code>{"success": Boolean, "msg": String}</code>
          * If <code>respond.success</code> is true item is deleted from the list. 
          * Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not deleted.
          * 
-         * @param {Plain Object} item "item options"
+         * @param {Object} item "item options"
          * @param {Boolean} discardEvent "trigger 'onItemDelete' event or not. 
          *                                The event is triggered by default but disabling event is necessary when you
          *                                already listen the event and show custom confirm dialog. After confirm dialog
@@ -580,11 +587,12 @@ $(function(){
             }
             return me;
         };
+        
         /**
          * If item does not have id, it is considered as new and adds to the list.
          * If it has id it is updated. If update and insert actions are provided corresponding request is sent to the server
          * 
-         * @param {Plain Object} item "Item options"
+         * @param {Object} item "Item options"
          * @returns {List}
          */
         this.saveOrUpdateItem = function(item){
@@ -595,6 +603,7 @@ $(function(){
             }
             return me;
         };
+        
         /**
          * Start title editing
          * 
@@ -611,6 +620,7 @@ $(function(){
             input[0].select();
             return me;
         };
+        
         /**
          * Finish title editing
          * 
@@ -623,6 +633,7 @@ $(function(){
             $HEADER.removeClass('title-editing');
             return me;
         };
+        
         /**
          * Cancel title editing
          * 
@@ -664,25 +675,24 @@ $(function(){
             }
             return me;
         };
+        
         /**
-         * Start editing of TODO
+         * Start editing of item
          * 
-         * @param {Integer} id "id of the TODO"
+         * @param {number} id "id of the item"
          * @returns {List}
          */
         this.editItem = function(id){
             var $item = me.$lobiList.$el.find('li[data-id='+id+']');
-            var $FORM = $item.closest('.lobilist').find('.lobilist-add-todo-form');
-            var $FOOTER = $item.closest('.lobilist').find('.lobilist-footer');
+            var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form');
+            var $footer = $item.closest('.lobilist').find('.lobilist-footer');
             
-            $FORM.removeClass('hide');
-            $FOOTER.addClass('hide');
-            $FORM[0].id.value = $item.attr('data-id');
-            $FORM[0].title.value = $item.find('.lobilist-item-title').html();
-            var desc = $item.find('.lobilist-item-description').html() || '';
-            $FORM[0].description.value = desc;
-            var date = $item.find('.lobilist-item-duedate').html() || '';
-            $FORM[0].dueDate.value = date;
+            $form.removeClass('hide');
+            $footer.addClass('hide');
+            $form[0].id.value = $item.attr('data-id');
+            $form[0].title.value = $item.find('.lobilist-item-title').html();
+            $form[0].description.value = $item.find('.lobilist-item-description').html() || '';
+            $form[0].dueDate.value = $item.find('.lobilist-item-duedate').html() || '';
             return me;
         };
         
@@ -696,9 +706,9 @@ $(function(){
 //------------------------------------------------------------------------------
 //----------------PROTOTYPE VARIABLES-------------------------------------------
 //------------------------------------------------------------------------------
-        this.$el;
-        this.$lists                 = [];
-        this.$options;
+        this.$el = null;
+        this.$lists = [];
+        this.$options = {};
 //------------------------------------------------------------------------------
 //-----------------PRIVATE VARIABLES--------------------------------------------
 //------------------------------------------------------------------------------        

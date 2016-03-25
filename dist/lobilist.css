@@ -1,4 +1,3 @@
-/*Author      : @arboshiki*/
 .lobilists .lobilist {
   display: inline-block;
   float: left;
@@ -316,39 +315,17 @@
 }
 .lobilists .lobilist-item {
   margin-bottom: 5px;
-  padding: 5px 0;
+  padding-top: 16px;
+  padding-bottom: 4px;
   padding-left: 35px;
   border-bottom: 1px solid #eeeeee;
   -webkit-transition: background-color 0.2s;
   -o-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.lobilists .lobilist-item .edit-todo,
-.lobilists .lobilist-item .delete-todo {
-  position: absolute;
-  top: 8px;
-  opacity: 0;
-  text-align: center;
-  font-size: 10px;
-  color: #9d9d9d;
-  line-height: 16px;
-  width: 16px;
-  height: 16px;
-}
-.lobilists .lobilist-item .edit-todo:hover,
-.lobilists .lobilist-item .delete-todo:hover {
-  cursor: pointer;
-  color: #5e5e5e;
-}
-.lobilists .lobilist-item .delete-todo {
-  right: 5px;
-}
-.lobilists .lobilist-item .edit-todo {
-  right: 21px;
-}
 .lobilists .lobilist-item .drag-handler {
   position: absolute;
-  left: 0px;
+  left: 0;
   top: 0;
   bottom: 0;
   width: 5px;
@@ -358,12 +335,27 @@
 .lobilists .lobilist-item .drag-handler:hover {
   cursor: move;
 }
+.lobilists .lobilist-item .todo-actions {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 10px;
+  color: #9d9d9d;
+  line-height: 16px;
+}
+.lobilists .lobilist-item .todo-action {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+.lobilists .lobilist-item .todo-action:hover {
+  cursor: pointer;
+  color: #5e5e5e;
+}
 .lobilists .lobilist-item:hover {
   background-color: rgba(0, 0, 0, 0.02);
-}
-.lobilists .lobilist-item:hover .edit-todo,
-.lobilists .lobilist-item:hover .delete-todo {
-  opacity: 1;
 }
 .lobilists .lobilist-item-title {
   font-weight: 600;
@@ -374,8 +366,8 @@
 }
 .lobilists .lobilist-item-duedate {
   position: absolute;
-  top: -4px;
-  right: 0;
+  top: 2px;
+  left: 12px;
   font-style: italic;
   color: #777777;
   font-size: 85%;
@@ -383,7 +375,7 @@
 .lobilists .lobilist-check {
   position: absolute;
   left: 12px;
-  top: 5px;
+  top: 16px;
 }
 .lobilists .lobilist-check.lobicheck {
   margin-top: 3px;
@@ -431,7 +423,7 @@
   background-color: rgba(0, 0, 0, 0.03);
   border: 1px dashed #dddddd;
   margin-bottom: 5px;
-  padding: 5px 0;
+  padding: 16px 0;
   padding-left: 35px;
 }
 @media (max-width: 480px) {
