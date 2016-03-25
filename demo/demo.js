@@ -7,7 +7,6 @@ $(function () {
         hljs.highlightBlock(el);
     });
 
-
     $('#todo-lists-demo-sorting').lobiList({
         sortable: false,
         lists: [
@@ -91,7 +90,7 @@ $(function () {
     });
     $('#todo-lists-initialize-btn').click(function () {
         $('#todo-lists-demo-events').lobiList({
-            onInit: function () {
+            init: function () {
                 Lobibox.notify('success', {
                     size: 'mini',
                     delay: false,

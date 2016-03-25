@@ -758,8 +758,8 @@ $(function () {
                     revert: 70
                 });
             }
-            if (me.$options.onInit) {
-                me.$options.onInit(me);
+            if (me.$options.init) {
+                me.$options.init(me);
             }
 
         };
@@ -869,7 +869,7 @@ $(function () {
         defaultStyle: 'lobilist-default',
 
         // Events
-        onInit: null,
+        init: null,
         beforeDestroy: null,
         afterDestroy: null,
         beforeListAdd: null,
@@ -892,6 +892,4 @@ $(function () {
         beforeUnmarkAsDone: null,
         afterUnmarkAsDone: null
     };
-
-    $('.lobilists').lobiList();
 });

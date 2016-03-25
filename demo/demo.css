@@ -1,0 +1,123 @@
+body {
+    position: relative;
+    padding-top: 60px
+}
+
+.navbar-brand {
+    padding-top: 8px
+}
+
+#sidebar {
+    height: 90%;
+    border-left: 1px solid #EEE;
+    padding-left: 25px;
+    overflow-y: auto;
+    min-width: 240px
+}
+
+.docs-sidenav li>a {
+    padding: 5px 10px
+}
+
+.docs-sidenav li .active {
+    border-left: 2px solid #346b99;
+    background-color: rgba(0,0,0,.02)
+}
+
+.docs-sidenav li .active>a {
+    text-shadow: 2px 2px 3px rgba(0,0,0,.4)
+}
+
+.docs-sidenav li .active .nav {
+    height: auto;
+    opacity: 1
+}
+
+.docs-sidenav li .active .nav>li .active {
+    border-left: none
+}
+
+.docs-sidenav .nav {
+    height: 0;
+    overflow: hidden;
+    opacity: 0
+}
+
+.docs-sidenav .nav>li>a {
+    padding-left: 30px
+}
+
+.bs-example {
+    background-color: #FFF;
+    position: relative;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
+    -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,.05)
+}
+
+.bs-example>.list-group {
+    max-width: 400px
+}
+
+.bs-example .modal {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    z-index: 1;
+    display: block
+}
+
+.bs-example .modal-dialog {
+    width: auto;
+    min-width: 200px;
+    left: auto;
+    margin-right: auto;
+    margin-left: auto
+}
+
+.bs-example-type .table tr:first-child td {
+    border-top: none
+}
+
+.bs-example-type .table td {
+    padding: 15px 0;
+    border-color: #eee
+}
+
+@media screen and (min-width: 768px) {
+    .bs-example {
+        margin-right:0;
+        margin-left: 0;
+        background-color: #fff;
+        border-color: #ddd;
+        border-width: 1px;
+        border-radius: 4px 4px 0 0;
+        -webkit-box-shadow: none;
+        box-shadow: none
+    }
+}
+
+.bs-example-modal {
+    background-color: #f5f5f5
+}
+
+.bs-example+.highlight {
+    margin-top: -16px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+.bs-example+.highlight pre {
+    border-radius: 0;
+}
+.bs-example+.highlight pre .hljs {
+    background-color: transparent;
+}
+#todo-lists-initialize-btn{
+    margin-bottom: 20px;
+}

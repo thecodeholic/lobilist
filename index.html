@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css">
     <link rel="stylesheet" href="lib/highlight/github.css">
+    <link rel="stylesheet" href="demo/demo.css">
 </head>
 <body>
 
@@ -73,7 +74,8 @@
                 </div>
                 <!--Examples-->
                 <div id="lobilist-examples">
-                    <h3>Examples</h3>
+                    <h1>Examples</h1>
+                    <hr>
                     <!--Basic example-->
                     <div>
                         <div class="bs-example">
@@ -140,7 +142,7 @@
                         </div>
                         <div class="highlight">
                             <pre><code>$('selector').lobiList({
-    onInit : function(){
+    init : function(){
         Lobibox.notify('success', {
             size: 'mini',
             delay: false,
