@@ -99,7 +99,7 @@ $(function () {
                     msg: 'LobiList is initialized'
                 });
             },
-            onAdd: function (list) {
+            beforeListAdd: function () {
                 Lobibox.notify('warning', {
                     size: 'mini',
                     delay: false,
@@ -107,7 +107,7 @@ $(function () {
                     msg: 'List added'
                 });
             },
-            onRemove: function (list) {
+            beforeListRemove: function (list) {
                 Lobibox.confirm({
                     msg: 'Are you sure you want to delete the list',
                     callback: function (box, type) {
@@ -118,7 +118,7 @@ $(function () {
                 });
                 return false;
             },
-            afterRemove: function () {
+            afterListRemove: function () {
                 Lobibox.notify('info', {
                     size: 'mini',
                     delay: false,
