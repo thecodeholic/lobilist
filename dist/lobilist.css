@@ -1,10 +1,16 @@
-.lobilists .lobilist {
+.lobilists .lobilist-wrapper,
+.lobilists .lobilist-placeholder {
   display: inline-block;
   float: left;
-  margin-bottom: 20px;
+  border: 1px solid transparent;
+  margin-bottom: 16px;
   width: 360px;
   background-color: #FFF;
-  margin-right: 10px;
+  margin-right: 16px;
+}
+.lobilists .lobilist {
+  max-height: 100%;
+  overflow: auto;
   -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -309,8 +315,7 @@
 }
 .lobilists .lobilist-items {
   list-style: none;
-  margin-bottom: -1px;
-  border-bottom: 1px solid #e2e2e2;
+  margin-bottom: 0;
   padding: 10px;
 }
 .lobilists .lobilist-item {
@@ -412,10 +417,6 @@
   height: 30px;
 }
 .lobilists .lobilist-placeholder {
-  display: inline-block;
-  float: left;
-  width: 360px;
-  margin-right: 10px;
   background-color: #f9f5d1;
   border: 1px dashed #777777;
 }
@@ -430,6 +431,21 @@
   .lobilists .lobilist {
     width: 100%;
   }
+}
+.lobilists.single-line {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  height: 400px;
+}
+.lobilists.single-line .lobilist-wrapper,
+.lobilists.single-line .lobilist-placeholder {
+  float: none;
+  vertical-align: top;
+  height: 100%;
+}
+.lobilists.single-line .lobilist-body {
+  white-space: normal;
 }
 .lobilists:before,
 .lobilists:after {
