@@ -75,8 +75,8 @@ $(function () {
             },
             {
                 title: 'Disabled todo edit/remove',
-                removeItemButton: false,
-                editItemButton: false,
+                enableTodoRemove: false,
+                enableTodoEdit: false,
                 items: [
                     {
                         title: 'Composed trays',

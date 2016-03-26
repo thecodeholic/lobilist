@@ -681,7 +681,7 @@ $(function () {
                 'class': 'todo-actions'
             }).appendTo($li);
 
-            if (me.$options.editItemButton) {
+            if (me.$options.enableTodoEdit) {
                 $itemControlsDiv.append($('<div>', {
                     'class': 'edit-todo todo-action',
                     html: '<i class="glyphicon glyphicon-pencil"></i>'
@@ -690,7 +690,7 @@ $(function () {
                 }));
             }
 
-            if (me.$options.removeItemButton) {
+            if (me.$options.enableTodoRemove) {
                 $itemControlsDiv.append($('<div>', {
                     'class': 'delete-todo todo-action',
                     html: '<i class="glyphicon glyphicon-remove"></i>'
@@ -805,7 +805,7 @@ $(function () {
 
         function _processListOptions(listOptions) {
             listOptions = $.extend({}, $.fn.lobiList.OPTIONS.listsOptions, listOptions);
-            var processOptions = ['useCheckboxes', 'removeItemButton', 'editItemButton', 'sortable',
+            var processOptions = ['useCheckboxes', 'enableTodoRemove', 'enableTodoEdit', 'sortable',
                 'controls', 'defaultStyle', 'beforeListAdd', 'beforeListRemove', 'afterListRemove',
                 'onItemAdd', 'afterItemAdd', 'onItemUpdate', 'afterItemUpdate',
                 'onItemDelete', 'afterItemDelete'];
@@ -834,6 +834,8 @@ $(function () {
                     opacity: 0.9,
                     revert: 70
                 });
+            } else {
+                me.$el.addClass('no-sortable');
             }
             if (me.$options.init) {
                 me.$options.init(me);
@@ -898,8 +900,9 @@ $(function () {
             'delete': ''
         },
         useCheckboxes: true,
-        removeItemButton: true,
-        editItemButton: true,
+        enableTodoAdd: false,
+        enableTodoRemove: true,
+        enableTodoEdit: true,
         sortable: true,
         controls: ['edit', 'add', 'remove', 'styleChange'],
         //List style. Available options: 'lobilist-default', 'lobilist-info', 'lobilist-success', 'lobilist-danger', 'lobilist-warning', 'lobilist-primary'

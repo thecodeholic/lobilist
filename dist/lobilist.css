@@ -445,6 +445,9 @@
   vertical-align: top;
   height: 100%;
 }
+.lobilists.no-sortable .lobilist-item .drag-handler {
+  display: none;
+}
 .lobilists:before,
 .lobilists:after {
   content: " ";
