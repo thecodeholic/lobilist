@@ -118,6 +118,6 @@ body {
 .bs-example+.highlight pre .hljs {
     background-color: transparent;
 }
-#todo-lists-initialize-btn{
-    margin-bottom: 20px;
+#todo-lists-demo-events{
+    margin-top: 20px;
 }

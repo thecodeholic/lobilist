@@ -796,6 +796,20 @@ $(function () {
             }
             return list;
         };
+
+        this.destroy = function () {
+            for (var i = 0; i< me.$lists.length; i++){
+                me.$lists[i].remove();
+            }
+            if (me.$options.sortable){
+                me.$el.sortable("destroy");
+            }
+
+            // me.$el.removeClass("lobilists").html("");
+            // delete me.$options;
+            console.log(me);
+        };
+
         /**
          * Get next id which will be assigned to new TODO
          *

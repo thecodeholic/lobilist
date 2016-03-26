@@ -88,122 +88,136 @@ $(function () {
             }
         ]
     });
-    $('#todo-lists-initialize-btn').click(function () {
-        $('#todo-lists-demo-events').lobiList({
-            init: function () {
-                Lobibox.notify('success', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'LobiList is initialized'
-                });
-            },
-            beforeListAdd: function () {
-                Lobibox.notify('warning', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'List added'
-                });
-            },
-            beforeListRemove: function (list) {
-                Lobibox.confirm({
-                    msg: 'Are you sure you want to delete the list',
-                    callback: function (box, type) {
-                        if (type === 'yes') {
-                            list.remove(true);
+
+    (function () {
+        var list;
+
+        $('#todo-lists-initialize-btn').click(function () {
+            list = $('#todo-lists-demo-events')
+                .lobiList({
+                init: function () {
+                    Lobibox.notify('success', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'LobiList is initialized'
+                    });
+                },
+                beforeListAdd: function () {
+                    Lobibox.notify('warning', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'List added'
+                    });
+                },
+                beforeListRemove: function (list) {
+                    Lobibox.confirm({
+                        msg: 'Are you sure you want to delete the list',
+                        callback: function (box, type) {
+                            if (type === 'yes') {
+                                list.remove(true);
+                            }
                         }
+                    });
+                    return false;
+                },
+                afterListRemove: function () {
+                    Lobibox.notify('info', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'List after remove'
+                    });
+                },
+                onItemAdd: function () {
+                    Lobibox.notify('info', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'Before item is added'
+                    });
+                },
+                afterItemAdd: function () {
+                    Lobibox.notify('info', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'After item is added'
+                    });
+                },
+                onItemUpdate: function () {
+                    Lobibox.notify('error', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'Before item is updated'
+                    });
+                },
+                afterItemUpdate: function () {
+                    Lobibox.notify('error', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'After item is updated'
+                    });
+                },
+                onItemDelete: function () {
+                    Lobibox.notify('warning', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'Before item is deleted'
+                    });
+                },
+                afterItemDelete: function () {
+                    Lobibox.notify('warning', {
+                        size: 'mini',
+                        delay: false,
+                        sound: false,
+                        msg: 'After item is deleted'
+                    });
+                },
+                lists: [
+                    {
+                        title: 'TODO',
+                        defaultStyle: 'lobilist-info',
+                        items: [
+                            {
+                                title: 'Floor cool cinders',
+                                description: 'Thunder fulfilled travellers folly, wading, lake.',
+                                dueDate: '2015-01-31'
+                            },
+                            {
+                                title: 'Periods pride',
+                                description: 'Accepted was mollis',
+                                done: true
+                            },
+                            {
+                                title: 'Flags better burns pigeon',
+                                description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
+                                'treacherously darkling.'
+                            },
+                            {
+                                title: 'Accepted was mollis',
+                                description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
+                                'treacherously darkling.',
+                                dueDate: '2015-02-02'
+                            }
+                        ]
                     }
-                });
-                return false;
-            },
-            afterListRemove: function () {
-                Lobibox.notify('info', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'List after remove'
-                });
-            },
-            onItemAdd: function () {
-                Lobibox.notify('info', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'Before item is added'
-                });
-            },
-            afterItemAdd: function () {
-                Lobibox.notify('info', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'After item is added'
-                });
-            },
-            onItemUpdate: function () {
-                Lobibox.notify('error', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'Before item is updated'
-                });
-            },
-            afterItemUpdate: function () {
-                Lobibox.notify('error', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'After item is updated'
-                });
-            },
-            onItemDelete: function () {
-                Lobibox.notify('warning', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'Before item is deleted'
-                });
-            },
-            afterItemDelete: function () {
-                Lobibox.notify('warning', {
-                    size: 'mini',
-                    delay: false,
-                    sound: false,
-                    msg: 'After item is deleted'
-                });
-            },
-            lists: [
-                {
-                    title: 'TODO',
-                    defaultStyle: 'lobilist-info',
-                    items: [
-                        {
-                            title: 'Floor cool cinders',
-                            description: 'Thunder fulfilled travellers folly, wading, lake.',
-                            dueDate: '2015-01-31'
-                        },
-                        {
-                            title: 'Periods pride',
-                            description: 'Accepted was mollis',
-                            done: true
-                        },
-                        {
-                            title: 'Flags better burns pigeon',
-                            description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
-                            'treacherously darkling.'
-                        },
-                        {
-                            title: 'Accepted was mollis',
-                            description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
-                            'treacherously darkling.',
-                            dueDate: '2015-02-02'
-                        }
-                    ]
-                }
-            ]
+                ]
+            })
+                .data('lobiList');
+            console.log(list);
         });
-    });
+
+        $('#todo-lists-destroy-btn').click(function () {
+            list.destroy();
+        });
+    })();
+
+
     $('#todo-lists-demo').lobiList({
         lists: [
             {
