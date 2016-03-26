@@ -441,11 +441,9 @@
 .lobilists.single-line .lobilist-wrapper,
 .lobilists.single-line .lobilist-placeholder {
   float: none;
+  white-space: normal;
   vertical-align: top;
   height: 100%;
-}
-.lobilists.single-line .lobilist-body {
-  white-space: normal;
 }
 .lobilists:before,
 .lobilists:after {

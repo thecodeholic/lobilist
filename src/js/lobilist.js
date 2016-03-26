@@ -286,15 +286,15 @@ $(function () {
 //------------------------------------------------------------------------------
 //-----------------PRIVATE FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------
-        function _processItemData (item) {
+        function _processItemData(item) {
             return $.extend({}, $.fn.lobiList.OPTIONS.itemOptions, item);
         }
 
-        function _init () {
+        function _init() {
             if (!me.$options.id) {
                 me.$options.id = Math.randomString(10);
             }
-            var $wrapper = $('<div>',{
+            var $wrapper = $('<div>', {
                 'class': 'lobilist-wrapper'
             });
             var $div = $('<div>', {
@@ -322,7 +322,7 @@ $(function () {
                 _enableSorting();
         }
 
-        function _createHeader () {
+        function _createHeader() {
             var $header = $('<div>', {
                 'class': 'lobilist-header'
             });
@@ -350,7 +350,7 @@ $(function () {
             return $header;
         }
 
-        function _createTitle () {
+        function _createTitle() {
             var $title = $('<div>', {
                 'class': 'lobilist-title',
                 html: me.$options.title
@@ -363,14 +363,14 @@ $(function () {
             return $title;
         }
 
-        function _createBody () {
+        function _createBody() {
             return $('<div>', {
                 'class': 'lobilist-body'
             }).appendTo(me.$el);
 
         }
 
-        function _createForm () {
+        function _createForm() {
             var $form = $('<form>', {
                 'class': 'lobilist-add-todo-form hide'
             });
@@ -431,14 +431,14 @@ $(function () {
             return $form;
         }
 
-        function _formHandler ($form) {
+        function _formHandler($form) {
             $form.on('submit', function (ev) {
                 ev.preventDefault();
                 _submitForm();
             });
         }
 
-        function _submitForm () {
+        function _submitForm() {
             if (!$form[0].title.value) {
                 _showFormError('title', 'Title can not be empty');
                 return;
@@ -453,7 +453,7 @@ $(function () {
             $footer.removeClass('hide');
         }
 
-        function _createFooter () {
+        function _createFooter() {
             var $footer = $('<div>', {
                 'class': 'lobilist-footer'
             });
@@ -470,7 +470,7 @@ $(function () {
             return $footer;
         }
 
-        function _createList () {
+        function _createList() {
             var $list = $('<ul>', {
                 'class': 'lobilist-items'
             });
@@ -478,7 +478,7 @@ $(function () {
             return $list;
         }
 
-        function _createItems (items) {
+        function _createItems(items) {
             for (var i = 0; i < items.length; i++) {
                 _addItem(items[i]);
             }
@@ -490,7 +490,7 @@ $(function () {
          *
          * @type Object
          */
-        function _addItem (item) {
+        function _addItem(item) {
             if (!item.id) {
                 item.id = me.$lobiList.getNextId();
             }
@@ -498,25 +498,19 @@ $(function () {
             _addItemToList(item);
         }
 
-        function _createCheckbox () {
+        function _createCheckbox() {
             var $item = $('<input>', {
                 'type': 'checkbox'
             });
             $item.change(function () {
                 $item.closest('.lobilist-item').toggleClass('item-done');
             });
-            var $label = $('<label>', {
+            return $('<label>', {
                 'class': 'checkbox-inline lobilist-check'
             }).append($item);
-            if (me.$options.useLobicheck) {
-                $label.addClass('lobicheck')
-                    .addClass(me.$options.lobicheckClass);
-                $label.append('<i></i>');
-            }
-            return $label;
         }
 
-        function _createDropdownForStyleChange () {
+        function _createDropdownForStyleChange() {
             var $dropdown = $('<div>', {
                 'class': 'dropdown'
             }).append(
@@ -546,7 +540,7 @@ $(function () {
             return $dropdown;
         }
 
-        function _createEditTitleButton () {
+        function _createEditTitleButton() {
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-edit"></i>'
@@ -558,7 +552,7 @@ $(function () {
             return $btn;
         }
 
-        function _createAddNewButton () {
+        function _createAddNewButton() {
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-plus"></i>'
@@ -570,7 +564,7 @@ $(function () {
             return $btn;
         }
 
-        function _createCloseButton () {
+        function _createCloseButton() {
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-remove"></i>'
@@ -581,7 +575,7 @@ $(function () {
             return $btn;
         }
 
-        function _createFinishTitleEditing () {
+        function _createFinishTitleEditing() {
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs btn-finish-title-editing',
                 html: '<i class="glyphicon glyphicon-ok-circle"></i>'
@@ -592,7 +586,7 @@ $(function () {
             return $btn;
         }
 
-        function _createCancelTitleEditing () {
+        function _createCancelTitleEditing() {
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs btn-cancel-title-editing',
                 html: '<i class="glyphicon glyphicon-remove-circle"></i>'
@@ -603,7 +597,7 @@ $(function () {
             return $btn;
         }
 
-        function _createInput () {
+        function _createInput() {
             var input = $('<input>', {
                 type: 'text',
                 'class': 'form-control'
@@ -616,7 +610,7 @@ $(function () {
             return input;
         }
 
-        function _showFormError (field, error) {
+        function _showFormError(field, error) {
             var $fGroup = $form.find('[name="' + field + '"]').closest('.form-group')
                 .addClass('has-error');
             $fGroup.find('.help-block').remove();
@@ -628,13 +622,13 @@ $(function () {
             );
         }
 
-        function _resetForm () {
+        function _resetForm() {
             $form[0].reset();
             $form[0].id.value = "";
             $form.find('.form-group').removeClass('has-error').find('.help-block').remove();
         }
 
-        function _enableSorting () {
+        function _enableSorting() {
             me.$el.find('.lobilist-items').sortable({
                 connectWith: '.lobilist .lobilist-items',
                 items: '.lobilist-item',
@@ -647,7 +641,7 @@ $(function () {
             });
         }
 
-        function _addItemToList (item) {
+        function _addItemToList(item) {
 //            item =
             var $li = $('<li>', {
                 'data-id': item.id,
@@ -679,7 +673,7 @@ $(function () {
             return $li;
         }
 
-        function _addItemControls ($li) {
+        function _addItemControls($li) {
             if (me.$options.useCheckboxes) {
                 $li.append(_createCheckbox());
             }
@@ -711,7 +705,7 @@ $(function () {
             return $li;
         }
 
-        function _updateItemInList (item) {
+        function _updateItemInList(item) {
             var $li = me.$lobiList.$el.find('li[data-id="' + item.id + '"]');
             $li.find('input[type=checkbox]').prop('checked', item.done);
             $li.find('.lobilist-item-title').html(item.title);
@@ -773,10 +767,10 @@ $(function () {
         };
 
         this.destroy = function () {
-            for (var i = 0; i< me.$lists.length; i++){
+            for (var i = 0; i < me.$lists.length; i++) {
                 me.$lists[i].remove();
             }
-            if (me.$options.sortable){
+            if (me.$options.sortable) {
                 me.$el.sortable("destroy");
             }
 
@@ -797,7 +791,7 @@ $(function () {
 //------------------------------------------------------------------------------
 //-----------------PRIVATE FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------
-        function _processInput (options) {
+        function _processInput(options) {
             options = $.extend({}, $.fn.lobiList.DEFAULT_OPTIONS, options);
             if (options.actions.load) {
                 $.ajax(options.actions.load, {
@@ -809,10 +803,9 @@ $(function () {
             return options;
         }
 
-        function _processListOptions (listOptions) {
+        function _processListOptions(listOptions) {
             listOptions = $.extend({}, $.fn.lobiList.OPTIONS.listsOptions, listOptions);
-            var processOptions = ['useCheckboxes', 'useLobicheck', 'lobicheckClass',
-                'removeItemButton', 'editItemButton', 'sortable',
+            var processOptions = ['useCheckboxes', 'removeItemButton', 'editItemButton', 'sortable',
                 'controls', 'defaultStyle', 'beforeListAdd', 'beforeListRemove', 'afterListRemove',
                 'onItemAdd', 'afterItemAdd', 'onItemUpdate', 'afterItemUpdate',
                 'onItemDelete', 'afterItemDelete'];
@@ -825,9 +818,9 @@ $(function () {
             return listOptions;
         }
 
-        function _init () {
+        function _init() {
             me.$el.addClass('lobilists');
-            if (me.$options.onSingleLine){
+            if (me.$options.onSingleLine) {
                 me.$el.addClass('single-line');
             }
             _createLists();
@@ -847,7 +840,7 @@ $(function () {
             }
         }
 
-        function _createLists () {
+        function _createLists() {
             for (var i = 0; i < me.$options.lists.length; i++) {
                 me.addList(me.$options.lists[i]);
             }
@@ -905,10 +898,6 @@ $(function () {
             'delete': ''
         },
         useCheckboxes: true,
-        useLobicheck: true,
-        //.lobicheck is automatically added. 
-        //Add .lobicheck-inversed, .lobicheck-rounded, .lobicheck-* (info|danger|success|inverse|warning)
-        lobicheckClass: 'lobicheck-info lobicheck-inversed',
         removeItemButton: true,
         editItemButton: true,
         sortable: true,
