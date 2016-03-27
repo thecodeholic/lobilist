@@ -602,8 +602,7 @@ $(function () {
                 opacity: 0.9,
                 revert: 70,
                 update: function(event, ui){
-                    _triggerEvent('afterItemDrop', [me]);
-                    console.log(ui.item.index());
+                    _triggerEvent('afterItemReorder', [me, ui.item]);
                 }
             });
         }
@@ -806,7 +805,10 @@ $(function () {
                     placeholder: 'lobilist-placeholder',
                     forcePlaceholderSize: true,
                     opacity: 0.9,
-                    revert: 70
+                    revert: 70,
+                    update: function(event, ui){
+                        _triggerEvent('afterListReorder', [me, ui.item.find('.lobilist').data('lobiList')]);
+                    }
                 });
             } else {
                 me.$el.addClass('no-sortable');
@@ -902,11 +904,9 @@ $(function () {
         afterItemUpdate: null,
         beforeItemDelete: null,
         afterItemDelete: null,
-
-        beforeListDrop: null,
-        afterListDrop: null,
-        beforeItemDrop: null,
-        afterItemDrop: null,
+        afterListReorder: null,
+        afterItemReorder: null,
+        
         beforeMarkAsDone: null,
         afterMarkAsDone: null,
         beforeUnmarkAsDone: null,

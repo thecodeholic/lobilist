@@ -186,10 +186,10 @@ $(function () {
                             msg: 'beforeListDrop'
                         });
                     },
-                    afterListDrop: function(){
-                        console.log('afterListDrop', arguments);
+                    afterListReorder: function(){
+                        console.log('afterListReorder', arguments);
                         Lobibox.notify('default', {
-                            msg: 'afterListDrop'
+                            msg: 'afterListReorder'
                         });
                     },
                     beforeItemDrop: function(){
@@ -198,10 +198,10 @@ $(function () {
                             msg: 'beforeItemDrop'
                         });
                     },
-                    afterItemDrop: function(){
-                        console.log('afterItemDrop', arguments);
+                    afterItemReorder: function(){
+                        console.log('afterItemReorder', arguments);
                         Lobibox.notify('default', {
-                            msg: 'afterItemDrop'
+                            msg: 'afterItemReorder'
                         });
                     },
                     beforeMarkAsDone: function(){
