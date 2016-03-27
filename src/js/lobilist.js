@@ -46,37 +46,28 @@ $(function () {
          * @returns {List}
          */
         this.addItem = function (item) {
-            if (me.$options.onItemAdd) {
-                me.$options.onItemAdd(me, item);
+            if (_triggerEvent('beforeItemAdd', [me, item]) === false){
+                return me;
             }
-            var saved = false;
+
             item = _processItemData(item);
             if (me.$globalOptions.actions.insert) {
                 $.ajax(me.$globalOptions.actions.insert, {
                         data: item,
-                        method: 'POST',
-                        async: false
+                        method: 'POST'
                     })
-                    //res is JSON object of format {"id": Number, "success": Boolean, "msg": String}
+                    //res is JSON object of format {"success": Boolean, "id": Number, "msg": String}
                     .done(function (res) {
                         if (res.success) {
-                            saved = true;
                             item.id = res.id;
+                            _addItemToList(item);
                         } else {
-                            Lobibox.notify('error', {
-                                msg: res.msg || "Error occured"
-                            });
+                            console.error(res.msg);
                         }
                     });
             } else {
-                saved = true;
                 item.id = me.$lobiList.getNextId();
-            }
-            if (saved) {
                 _addItemToList(item);
-            }
-            if (me.$options.afterItemAdd) {
-                me.$options.afterItemAdd(me, item);
             }
             return me;
         };
@@ -91,35 +82,24 @@ $(function () {
          * @returns {List}
          */
         this.updateItem = function (item) {
-            if (me.$options.onItemUpdate) {
-                me.$options.onItemUpdate(me, item);
+            if (_triggerEvent('beforeItemUpdate', [me, item]) === false) {
+                return me
             }
-            var saved = false;
             if (me.$globalOptions.actions.update) {
                 $.ajax(me.$globalOptions.actions.update, {
                         data: item,
-                        method: 'POST',
-                        async: false
+                        method: 'POST'
                     })
                     //res is JSON object of format {"id": Number, "success": Boolean, "msg": String}
                     .done(function (res) {
                         if (res.success) {
-                            saved = true;
+                            _updateItemInList(item);
                         } else {
-                            Lobibox.notify('error', {
-                                msg: res.msg || "Error occured"
-                            });
+                            console.error("Error updating event");
                         }
                     });
-            } else {
-                saved = true;
             }
-            if (saved) {
-                _updateItemInList(item);
-            }
-            if (me.$options.afterItemUpdate) {
-                me.$options.afterItemUpdate(me, item);
-            }
+            _triggerEvent('afterItemUpdate', [me, item]);
             return me;
         };
 
@@ -138,38 +118,24 @@ $(function () {
          * @returns {List}
          */
         this.deleteItem = function (item, discardEvent) {
-            var check = true;
-            if (!discardEvent && me.$options.onItemDelete) {
-                check = me.$options.onItemDelete(me, item);
-            }
-            if (check === false) {
-                return me;
-            }
-            var deleted = false;
-            if (me.$globalOptions.actions.delete) {
-                $.ajax(me.$globalOptions.actions.delete, {
-                        data: item,
-                        method: 'POST',
-                        async: false
-                    })
-                    //res is JSON object of format
-                    .done(function (res) {
-                        if (res.success) {
-                            deleted = true;
-                        } else {
-                            Lobibox.notify('error', {
-                                msg: res.msg || "Error occured"
-                            });
-                        }
-                    });
-            } else {
-                deleted = true;
-            }
-            if (deleted) {
-                me.$lobiList.$el.find('li[data-id=' + item.id + ']').remove();
-            }
-            if (me.$options.afterItemDelete) {
-                me.$options.afterItemDelete(me, item);
+            if (discardEvent || (!discardEvent && _triggerEvent('beforeItemDelete', [me, item]) !== false)) {
+                if (me.$globalOptions.actions.delete) {
+                    $.ajax(me.$globalOptions.actions.delete, {
+                            data: item,
+                            method: 'POST',
+                            async: false
+                        })
+                        //res is JSON object of format
+                        .done(function (res) {
+                            if (res.success) {
+                                _removeItemFromList(item);
+                            } else {
+                                console.error("Error during delete: "+res.msg);
+                            }
+                        });
+                } else {
+                    _removeItemFromList(item);
+                }
             }
             return me;
         };
@@ -247,19 +213,12 @@ $(function () {
          * @returns {List}
          */
         this.remove = function (discardEvent) {
-            var check = true;
-            if (!discardEvent && me.$options.beforeListRemove) {
-                check = me.$options.beforeListRemove(me);
+            if (discardEvent || (!discardEvent && _triggerEvent('beforeListRemove', [me]) !== false)) {
+                me.$lobiList.$lists.splice(me.$el.index(), 1);
+                me.$elWrapper.remove();
+                _triggerEvent('afterListRemove', [me]);
             }
-            if (check === false) {
-                return me;
-            }
-            me.$lobiList.$lists.splice(me.$el.index(), 1);
-            me.$elWrapper.remove();
 
-            if (me.$options.afterListRemove) {
-                me.$options.afterListRemove(me);
-            }
             return me;
         };
 
@@ -302,7 +261,6 @@ $(function () {
                 'class': 'lobilist'
             }).appendTo($wrapper);
 
-//            window.console.log(me.$options);
             if (me.$options.defaultStyle) {
                 $div.addClass(me.$options.defaultStyle);
             }
@@ -494,8 +452,10 @@ $(function () {
             if (!item.id) {
                 item.id = me.$lobiList.getNextId();
             }
-            item = _processItemData(item);
-            _addItemToList(item);
+            if (_triggerEvent('beforeItemAdd', [me, item]) !== false){
+                item = _processItemData(item);
+                _addItemToList(item);
+            }
         }
 
         function _createCheckbox() {
@@ -569,10 +529,13 @@ $(function () {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-remove"></i>'
             });
-            $btn.click(function () {
-                me.remove();
-            });
+            $btn.click(_onRemoveListClick);
             return $btn;
+        }
+
+        function _onRemoveListClick() {
+            me.remove();
+            return me;
         }
 
         function _createFinishTitleEditing() {
@@ -637,7 +600,11 @@ $(function () {
                 placeholder: 'lobilist-item-placeholder',
                 forcePlaceholderSize: true,
                 opacity: 0.9,
-                revert: 70
+                revert: 70,
+                update: function(event, ui){
+                    _triggerEvent('afterItemDrop', [me]);
+                    console.log(ui.item.index());
+                }
             });
         }
 
@@ -670,6 +637,7 @@ $(function () {
             }
             $li.data('lobiListItem', item);
             $ul.append($li);
+            _triggerEvent('afterItemAdd', [me, item]);
             return $li;
         }
 
@@ -722,6 +690,18 @@ $(function () {
             $li.data('lobiListItem', item);
         }
 
+        function _triggerEvent(type, data) {
+            if (me.$options[type] && typeof me.$options[type] === 'function') {
+                return me.$options[type].call(me, data);
+            } else {
+                return me.$el.trigger(type, data);
+            }
+        }
+
+        function _removeItemFromList(item) {
+            me.$lobiList.$el.find('li[data-id=' + item.id + ']').remove();
+            _triggerEvent('afterItemDelete', [me, item]);
+        }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -745,33 +725,31 @@ $(function () {
 //------------------------------------------------------------------------------
         /**
          *
-         * @param {Object} options
+         * @param {Object} list
          * @returns {List}
          */
-        this.addList = function (options) {
-            var list;
-            if (options instanceof List) {
-                list = options;
-            } else {
-                options = _processListOptions(options);
-                list = new List(me, options);
+        this.addList = function (list) {
+            if (!(list instanceof List)) {
+                list = new List(me, _processListOptions(list));
             }
-            me.$lists.push(list);
-            me.$el.append(list.$elWrapper);
-            list.$el.data('lobiList', list);
-            //Trigger beforeListAdd event
-            if (me.$options.beforeListAdd) {
-                me.$options.beforeListAdd(me);
+            if (_triggerEvent('beforeListAdd', [me, list]) !== false){
+                me.$lists.push(list);
+                me.$el.append(list.$elWrapper);
+                list.$el.data('lobiList', list);
+                _triggerEvent('afterListAdd', [me, list]);
             }
             return list;
         };
 
         this.destroy = function () {
-            for (var i = 0; i < me.$lists.length; i++) {
-                me.$lists[i].remove();
-            }
-            if (me.$options.sortable) {
-                me.$el.sortable("destroy");
+            if (_triggerEvent('beforeDestroy', [me]) !== false) {
+                for (var i = 0; i < me.$lists.length; i++) {
+                    me.$lists[i].remove();
+                }
+                if (me.$options.sortable) {
+                    me.$el.sortable("destroy");
+                }
+                _triggerEvent('afterDestroy', [me]);
             }
 
             // me.$el.removeClass("lobilists").html("");
@@ -805,14 +783,10 @@ $(function () {
 
         function _processListOptions(listOptions) {
             listOptions = $.extend({}, $.fn.lobiList.OPTIONS.listsOptions, listOptions);
-            var processOptions = ['useCheckboxes', 'enableTodoRemove', 'enableTodoEdit', 'sortable',
-                'controls', 'defaultStyle', 'beforeListAdd', 'beforeListRemove', 'afterListRemove',
-                'onItemAdd', 'afterItemAdd', 'onItemUpdate', 'afterItemUpdate',
-                'onItemDelete', 'afterItemDelete'];
 
-            for (var i = 0; i < processOptions.length; i++) {
-                if (listOptions[processOptions[i]] === undefined) {
-                    listOptions[processOptions[i]] = me.$options[processOptions[i]];
+            for (var i in me.$options){
+                if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined){
+                    listOptions[i] = me.$options[i];
                 }
             }
             return listOptions;
@@ -837,14 +811,20 @@ $(function () {
             } else {
                 me.$el.addClass('no-sortable');
             }
-            if (me.$options.init) {
-                me.$options.init(me);
-            }
+            _triggerEvent('init', [me]);
         }
 
         function _createLists() {
             for (var i = 0; i < me.$options.lists.length; i++) {
                 me.addList(me.$options.lists[i]);
+            }
+        }
+
+        function _triggerEvent(type, data) {
+            if (me.$options[type] && typeof me.$options[type] === 'function') {
+                return me.$options[type].call(me, data);
+            } else {
+                return me.$el.trigger(type, data);
             }
         }
 
@@ -854,7 +834,6 @@ $(function () {
         this.$el = $el;
         this.$options = _processInput(options);
         _init();
-//        window.console.log(me);
     };
 
     $.fn.lobiList = function (option) {

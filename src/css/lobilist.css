@@ -5,12 +5,12 @@
   border: 1px solid transparent;
   margin-bottom: 16px;
   width: 360px;
-  background-color: #FFF;
   margin-right: 16px;
 }
 .lobilists .lobilist {
   max-height: 100%;
   overflow: auto;
+  background-color: #FFF;
   -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -318,7 +318,9 @@
   margin-bottom: 0;
   padding: 10px;
 }
-.lobilists .lobilist-item {
+.lobilists .lobilist-item,
+.lobilists .lobilist-item-placeholder {
+  border: 1px solid transparent;
   margin-bottom: 5px;
   padding-top: 16px;
   padding-bottom: 4px;
@@ -385,7 +387,8 @@
 .lobilists .lobilist-check.lobicheck {
   margin-top: 3px;
 }
-.lobilists .lobilist-item {
+.lobilists .lobilist-item,
+.lobilists .lobilist-item-placeholder {
   position: relative;
 }
 .lobilists .lobilist-item.item-done {
@@ -423,9 +426,6 @@
 .lobilists .lobilist-item-placeholder {
   background-color: rgba(0, 0, 0, 0.03);
   border: 1px dashed #dddddd;
-  margin-bottom: 5px;
-  padding: 16px 0;
-  padding-left: 35px;
 }
 @media (max-width: 480px) {
   .lobilists .lobilist {
