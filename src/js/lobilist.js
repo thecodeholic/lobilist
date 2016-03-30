@@ -462,12 +462,21 @@ $(function () {
             var $item = $('<input>', {
                 'type': 'checkbox'
             });
-            $item.change(function () {
-                $item.closest('.lobilist-item').toggleClass('item-done');
-            });
+            $item.change(_onCheckboxChange);
             return $('<label>', {
                 'class': 'checkbox-inline lobilist-check'
             }).append($item);
+        }
+
+        function _onCheckboxChange(){
+            var $this = $(this);
+            if ($this.prop('checked')){
+                _triggerEvent('afterMarkAsDone', [me, $this])
+            } else {
+                _triggerEvent('afterMarkAsUndone', [me, $this])
+            }
+
+            $this.closest('.lobilist-item').toggleClass('item-done');
         }
 
         function _createDropdownForStyleChange() {
@@ -891,25 +900,135 @@ $(function () {
         onSingleLine: true,
 
         // Events
+        /**
+         * @event init
+         * Fires when <code>LobiList</code> is initialized
+         * @param {LobiList} The <code>LobiList</code> instance
+         */
         init: null,
-        beforeDestroy: null,
-        afterDestroy: null,
-        beforeListAdd: null,
-        afterListAdd: null,
-        beforeListRemove: null,
-        afterListRemove: null,
-        beforeItemAdd: null,
-        afterItemAdd: null,
-        beforeItemUpdate: null,
-        afterItemUpdate: null,
-        beforeItemDelete: null,
-        afterItemDelete: null,
-        afterListReorder: null,
-        afterItemReorder: null,
         
-        beforeMarkAsDone: null,
+        /**
+         * @event beforeDestroy
+         * Fires before <code>Lobilist</code> is destroyed. Return false if you do not want <code>LobiList</code> to be destroyed.
+         * @param {LobiList} The <code>LobiList</code> to be destroyed
+         */
+        beforeDestroy: null,
+        
+        /**
+         * @event afterDestroy
+         * Fires after <code>Lobilist</code> is destroyed.
+         * @param {LobiList} The destroyed <code>LobiList</code> instance
+         */
+        afterDestroy: null,
+
+        /**
+         * @event beforeListAdd
+         * Fires before <code>List</code> is added to <code>LobiList</code>. Return false to prevent adding list.
+         * @param {LobiList} The <code>LobiList</code> instance
+         * @param {List} The <code>List</code> instance to be added
+         */
+        beforeListAdd: null,
+
+        /**
+         * @event afterListAdd
+         * Fires after <code>List</code> is added to <code>LobiList</code>.
+         * @param {LobiList} The <code>LobiList</code> instance
+         * @param {List} Just added <code>List</code> instance
+         */
+        afterListAdd: null,
+
+        /**
+         * @event beforeListRemove
+         * Fires before <code>List</code> is removed. Returning false will prevent removing the list
+         * @param {List} The <code>List</code> to be removed
+         */
+        beforeListRemove: null,
+
+        /**
+         * @event afterListRemove
+         * Fires after <code>List</code> is removed
+         * @param {List} The remove <code>List</code>
+         */
+        afterListRemove: null,
+
+        /**
+         * @event beforeItemAdd
+         * Fires before item is added in <code>List</code>. Return false if you want to prevent removing item
+         * @param {List} The <code>List</code> in which the item is going to be added
+         * @param {Object} The item object
+         */
+        beforeItemAdd: null,
+
+        /**
+         * @event afterItemAdd
+         * Fires after item is added in <code>List</code>
+         * @param {List} The <code>List</code> in which the item is added
+         * @param {Object} The item object
+         */
+        afterItemAdd: null,
+
+        /**
+         * @event beforeItemUpdate
+         * Fires before item is updated. Returning false will prevent updating item
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The item object which is going to be updated
+         */
+        beforeItemUpdate: null,
+
+        /**
+         * @event afterItemUpdate
+         * Fires after item is updated
+         * @param {List} The <code>List</code> object
+         * @param {Object} The updated item object
+         */
+        afterItemUpdate: null,
+
+        /**
+         * @event beforeItemDelete
+         * Fires before item is deleted. Returning false will prevent deleting the item
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The item object to be deleted
+         */
+        beforeItemDelete: null,
+
+        /**
+         * @event afterItemDelete
+         * Fires after item is deleted.
+         * @param {List} The <code>List</code> object
+         * @param {Object} The deleted item object
+         */
+        afterItemDelete: null,
+
+        /**
+         * @event afterListReorder
+         * Fires after <code>List</code> position is changed among its siblings
+         * @param {LobiList} The <code>LobiList</code> instance
+         * @param {List} The <code>List</code> instance which changed its position
+         */
+        afterListReorder: null,
+
+        /**
+         * @event afterItemReorder
+         * Fires after item position is changed (it is reordered) in list
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The jQuery object of item
+         */
+        afterItemReorder: null,
+
+        /**
+         * @event afterMarkAsDone
+         * Fires after item is marked as done.
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The jQuery checkbox object
+         */
         afterMarkAsDone: null,
-        beforeUnmarkAsDone: null,
-        afterUnmarkAsDone: null
+
+        /**
+         * @event afterMarkAsUndone
+         * Fires after item is marked as undone
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The jQuery checkbox object
+         */
+        afterMarkAsUndone: null
     };
 });

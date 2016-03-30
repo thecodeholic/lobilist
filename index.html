@@ -72,6 +72,164 @@
 </code></pre>
                     </div>
                 </div>
+                <div id="lobilist-events">
+                    <div class="plugin-documentation plugin-events">
+                        <div class="row row-header">
+                            <div class="cell cell-name">Name</div>
+                            <div class="cell cell-params">Parameters</div>
+                            <div class="cell cell-descr">Description</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">init</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The <code>LobiList</code> instance</div>
+                            </div>
+                            <div class="cell cell-descr">Fires when <code>LobiList</code> is initialized</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeDestroy</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The <code>LobiList</code> to be destroyed</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before <code>Lobilist</code> is destroyed. Return false
+                                if you do not want <code>LobiList</code> to be destroyed.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterDestroy</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The destroyed <code>LobiList</code> instance</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after <code>Lobilist</code> is destroyed.</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeListAdd</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The <code>LobiList</code> instance</div>
+                                <div><code>List</code> - The <code>List</code> instance to be added</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before <code>List</code> is added to
+                                <code>LobiList</code>. Return false to prevent adding list.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterListAdd</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The <code>LobiList</code> instance</div>
+                                <div><code>List</code> - Just added <code>List</code> instance</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after <code>List</code> is added to <code>LobiList</code>.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeListRemove</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> to be removed</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before <code>List</code> is removed. Returning false will
+                                prevent removing the list
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterListRemove</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The remove <code>List</code></div>
+                            </div>
+                            <div class="cell cell-descr">Fires after <code>List</code> is removed</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeItemAdd</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> in which the item is going to be added
+                                </div>
+                                <div><code>Object</code> - The item object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before item is added in <code>List</code>. Return false
+                                if you want to prevent removing item
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterItemAdd</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> in which the item is added</div>
+                                <div><code>Object</code> - The item object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item is added in <code>List</code></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeItemUpdate</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> instance</div>
+                                <div><code>Object</code> - The item object which is going to be updated</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before item is updated. Returning false will prevent
+                                updating item
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterItemUpdate</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> object</div>
+                                <div><code>Object</code> - The updated item object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item is updated</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">beforeItemDelete</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> instance</div>
+                                <div><code>Object</code> - The item object to be deleted</div>
+                            </div>
+                            <div class="cell cell-descr">Fires before item is deleted. Returning false will prevent
+                                deleting the item
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterItemDelete</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> object</div>
+                                <div><code>Object</code> - The deleted item object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item is deleted.</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterListReorder</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>LobiList</code> - The <code>LobiList</code> instance</div>
+                                <div><code>List</code> - The <code>List</code> instance which changed its position</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after <code>List</code> position is changed among its
+                                siblings
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterItemReorder</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> instance</div>
+                                <div><code>Object</code> - The jQuery object of item</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item position is changed (it is reordered) in
+                                list
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterMarkAsDone</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> instance</div>
+                                <div><code>Object</code> - The jQuery checkbox object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item is marked as done.</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell cell-name">afterMarkAsUndone</div>
+                            <div class="cell cell-params"><span class="text-mobile">Parameters: </span>
+                                <div><code>List</code> - The <code>List</code> instance</div>
+                                <div><code>Object</code> - The jQuery checkbox object</div>
+                            </div>
+                            <div class="cell cell-descr">Fires after item is marked as undone</div>
+                        </div>
+                    </div>
+                </div>
                 <!--Examples-->
                 <div id="lobilist-examples">
                     <h1>Examples</h1>

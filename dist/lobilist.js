@@ -462,12 +462,21 @@ $(function () {
             var $item = $('<input>', {
                 'type': 'checkbox'
             });
-            $item.change(function () {
-                $item.closest('.lobilist-item').toggleClass('item-done');
-            });
+            $item.change(_onCheckboxChange);
             return $('<label>', {
                 'class': 'checkbox-inline lobilist-check'
             }).append($item);
+        }
+
+        function _onCheckboxChange(){
+            var $this = $(this);
+            if ($this.prop('checked')){
+                _triggerEvent('afterMarkAsDone', [me, $this])
+            } else {
+                _triggerEvent('afterMarkAsUndone', [me, $this])
+            }
+
+            $this.closest('.lobilist-item').toggleClass('item-done');
         }
 
         function _createDropdownForStyleChange() {
@@ -891,10 +900,45 @@ $(function () {
         onSingleLine: true,
 
         // Events
+        /**
+         * @event init
+         * Fires when <code>LobiList</code> is initialized
+         * @param {LobiList} The <code>LobiList</code> instance
+         */
         init: null,
+        
+        /**
+         * @event beforeDestroy
+         * Fires before <code>Lobilist</code> is destroyed. Return false if you do not want <code>LobiList</code> to be destroyed.
+         * @param {LobiList} The <code>LobiList</code> to be destroyed
+         */
         beforeDestroy: null,
+        
+        /**
+         * @event afterDestroy
+         *
+         *
+         *
+         * Fires after <code>Lobilist</code> 
+         * is destroyed.
+         * @param {LobiList} The destroyed <code>LobiList</code> instance
+         */
         afterDestroy: null,
+
+        /**
+         * @event beforeListAdd
+         * Fires before <code>List</code> is added to <code>LobiList</code>. Return false to prevent adding list.
+         * @param {LobiList} The <code>LobiList</code> instance
+         * @param {List} The <code>List</code> instance to be added
+         */
         beforeListAdd: null,
+
+        /**
+         * @event afterListAdd
+         * Fires after <code>List</code> is added to <code>LobiList</code>.
+         * @param {LobiList} The <code>LobiList</code> instance
+         * @param {List} Just added <code>List</code> instance
+         */
         afterListAdd: null,
         beforeListRemove: null,
         afterListRemove: null,
@@ -907,9 +951,7 @@ $(function () {
         afterListReorder: null,
         afterItemReorder: null,
         
-        beforeMarkAsDone: null,
         afterMarkAsDone: null,
-        beforeUnmarkAsDone: null,
-        afterUnmarkAsDone: null
+        afterMarkAsUndone: null
     };
 });

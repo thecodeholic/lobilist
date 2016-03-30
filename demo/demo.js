@@ -204,28 +204,16 @@ $(function () {
                             msg: 'afterItemReorder'
                         });
                     },
-                    beforeMarkAsDone: function(){
-                        console.log('beforeMarkAsDone', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeMarkAsDone'
-                        });
-                    },
                     afterMarkAsDone: function(){
                         console.log('afterMarkAsDone', arguments);
                         Lobibox.notify('default', {
                             msg: 'afterMarkAsDone'
                         });
                     },
-                    beforeUnmarkAsDone: function(){
-                        console.log('beforeUnmarkAsDone', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeUnmarkAsDone'
-                        });
-                    },
-                    afterUnmarkAsDone: function(){
+                    afterMarkAsUndone: function(){
                         console.log('afterUnmarkAsDone', arguments);
                         Lobibox.notify('default', {
-                            msg: 'afterUnmarkAsDone'
+                            msg: 'afterMarkAsUndone'
                         });
                     },
                     lists: [
