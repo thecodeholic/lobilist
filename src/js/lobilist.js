@@ -38,15 +38,17 @@ $(function () {
 
         /**
          * Add item. If <code>action.insert</code> url is provided request is sent to the server.
-         * Server respond: <code>{"success": Boolean, "msg": String}</code>
-         * If <code>respond.success</code> is true item is added.
-         * Otherwise <big>Lobibox</big> error notification is shown with the message server responded and item is not added.
+         * Server response example: <code>{"success": Boolean}</code>.
+         * If <code>response.success</code> is true item is added.
+         * Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
-         * @param {Object} item "item options"
+         * @param {Object} item - The item <code>Object</code>
+         * @param {Function} errorCallback - The callback which is called when server returned response but
+         * <code>response.success=false</code>
          * @returns {List}
          */
-        this.addItem = function (item) {
-            if (_triggerEvent('beforeItemAdd', [me, item]) === false){
+        this.addItem = function (item, errorCallback) {
+            if (_triggerEvent('beforeItemAdd', [me, item]) === false) {
                 return me;
             }
 
@@ -62,7 +64,9 @@ $(function () {
                             item.id = res.id;
                             _addItemToList(item);
                         } else {
-                            console.error(res.msg);
+                            if (errorCallback && typeof errorCallback === 'function') {
+                                errorCallback(res)
+                            }
                         }
                     });
             } else {
@@ -74,14 +78,16 @@ $(function () {
 
         /**
          * Update item. If <code>action.update</code> url is provided request is sent to the server.
-         * Server respond: <code>{"success": Boolean, "msg": String}</code>
-         * If <code>respond.success</code> is true item is updated.
-         * Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not updated.
+         * Server response example: <code>{"success": Boolean}</code>.
+         * If <code>response.success</code> is true item is updated.
+         * Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
-         * @param {Object} item "item options"
+         * @param {Object} item  - The item <code>Object</code> to update
+         * @param {Function} errorCallback - The callback which is called when server returned response but
+         * <code>response.success=false</code>
          * @returns {List}
          */
-        this.updateItem = function (item) {
+        this.updateItem = function (item, errorCallback) {
             if (_triggerEvent('beforeItemUpdate', [me, item]) === false) {
                 return me
             }
@@ -95,63 +101,64 @@ $(function () {
                         if (res.success) {
                             _updateItemInList(item);
                         } else {
-                            console.error("Error updating event");
+                            if (errorCallback && typeof errorCallback === 'function') {
+                                errorCallback(res)
+                            }
                         }
                     });
+            } else {
+                _updateItemInList(item);
             }
-            _triggerEvent('afterItemUpdate', [me, item]);
             return me;
         };
 
         /**
          * Delete item from the list. If <code>action.delete</code> url is provided request is sent to the server.
-         * Server respond: <code>{"success": Boolean, "msg": String}</code>
-         * If <code>respond.success</code> is true item is deleted from the list.
-         * Otherwise <code>Lobibox</code> error notification is shown with the message server responded and item is not deleted.
+         * Server response example: <code>{"success": Boolean}</code>
+         * If <code>response.success=true</code> item is deleted from the list and <code>afterItemDelete</code> event
+         * if triggered. Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
-         * @param {Object} item "item options"
-         * @param {Boolean} discardEvent "trigger 'onItemDelete' event or not.
-         *                                The event is triggered by default but disabling event is necessary when you
-         *                                already listen the event and show custom confirm dialog. After confirm dialog
-         *                                approvement you can call this method dynamically and give second parameter as true
-         *                                which does not trigger the event again and item will be deleted"
+         * @param {Object} item - The item <code>Object</code> to delete
+         * @param {Function} errorCallback - The callback which is called when server returned response but
+         * <code>response.success=false</code>
          * @returns {List}
          */
-        this.deleteItem = function (item, discardEvent) {
-            if (discardEvent || (!discardEvent && _triggerEvent('beforeItemDelete', [me, item]) !== false)) {
-                if (me.$globalOptions.actions.delete) {
-                    $.ajax(me.$globalOptions.actions.delete, {
-                            data: item,
-                            method: 'POST',
-                            async: false
-                        })
-                        //res is JSON object of format
-                        .done(function (res) {
-                            if (res.success) {
-                                _removeItemFromList(item);
-                            } else {
-                                console.error("Error during delete: "+res.msg);
+        this.deleteItem = function (item, errorCallback) {
+            if (me.$globalOptions.actions.delete) {
+                return _sendAjax(me.$globalOptions.actions.delete, {
+                        data: item,
+                        method: 'POST'
+                    })
+                    //res is JSON object of format
+                    .done(function (res) {
+                        if (res.success) {
+                            _removeItemFromList(item);
+                        } else {
+                            if (errorCallback && typeof errorCallback === 'function') {
+                                errorCallback(res)
                             }
-                        });
-                } else {
-                    _removeItemFromList(item);
-                }
+                        }
+                    });
+            } else {
+                _removeItemFromList(item);
             }
             return me;
         };
 
         /**
-         * If item does not have id, it is considered as new and adds to the list.
+         * If item does not have id, it is considered as new and is added to the list.
          * If it has id it is updated. If update and insert actions are provided corresponding request is sent to the server
          *
-         * @param {Object} item "Item options"
+         * @param {Object} item  - The item <code>Object</code>
+         * @param {Function} errorCallback - The callback which is called when server returned response but
+         * <code>response.success=false</code>
          * @returns {List}
          */
-        this.saveOrUpdateItem = function (item) {
+        this.saveOrUpdateItem = function (item, errorCallback) {
             if (item.id) {
-                me.updateItem(item);
+                me.updateItem(item, errorCallback);
             } else {
-                me.addItem(item);
+                me.addItem(item, errorCallback);
             }
             return me;
         };
@@ -205,19 +212,11 @@ $(function () {
         /**
          * Remove list
          *
-         * @param {Boolean} discardEvent "trigger 'beforeListRemove' event or not.
-         *                                The event is triggered by default but disabling event is necessary when you
-         *                                already listen the event and show custom confirm dialog. After confirm dialog
-         *                                approvement you can call this method dynamically and give second parameter as true
-         *                                which does not trigger the event again and list will be removed"
          * @returns {List}
          */
-        this.remove = function (discardEvent) {
-            if (discardEvent || (!discardEvent && _triggerEvent('beforeListRemove', [me]) !== false)) {
-                me.$lobiList.$lists.splice(me.$el.index(), 1);
-                me.$elWrapper.remove();
-                _triggerEvent('afterListRemove', [me]);
-            }
+        this.remove = function () {
+            me.$lobiList.$lists.splice(me.$el.index(), 1);
+            me.$elWrapper.remove();
 
             return me;
         };
@@ -225,7 +224,7 @@ $(function () {
         /**
          * Start editing of item
          *
-         * @param {number} id "id of the item"
+         * @param {number} id - The id of the item to start updating
          * @returns {List}
          */
         this.editItem = function (id) {
@@ -452,7 +451,7 @@ $(function () {
             if (!item.id) {
                 item.id = me.$lobiList.getNextId();
             }
-            if (_triggerEvent('beforeItemAdd', [me, item]) !== false){
+            if (_triggerEvent('beforeItemAdd', [me, item]) !== false) {
                 item = _processItemData(item);
                 _addItemToList(item);
             }
@@ -468,9 +467,9 @@ $(function () {
             }).append($item);
         }
 
-        function _onCheckboxChange(){
+        function _onCheckboxChange() {
             var $this = $(this);
-            if ($this.prop('checked')){
+            if ($this.prop('checked')) {
                 _triggerEvent('afterMarkAsDone', [me, $this])
             } else {
                 _triggerEvent('afterMarkAsUndone', [me, $this])
@@ -543,7 +542,9 @@ $(function () {
         }
 
         function _onRemoveListClick() {
+            _triggerEvent('beforeListRemove', [me]);
             me.remove();
+            _triggerEvent('afterListRemove', [me]);
             return me;
         }
 
@@ -610,7 +611,7 @@ $(function () {
                 forcePlaceholderSize: true,
                 opacity: 0.9,
                 revert: 70,
-                update: function(event, ui){
+                update: function (event, ui) {
                     _triggerEvent('afterItemReorder', [me, ui.item]);
                 }
             });
@@ -671,7 +672,7 @@ $(function () {
                     'class': 'delete-todo todo-action',
                     html: '<i class="glyphicon glyphicon-remove"></i>'
                 }).click(function () {
-                    me.deleteItem($(this).closest('li').data('lobiListItem'));
+                    _onDeleteItemClick($(this).closest('li').data('lobiListItem'));
                 }));
             }
 
@@ -679,6 +680,11 @@ $(function () {
                 'class': 'drag-handler'
             }));
             return $li;
+        }
+
+        function _onDeleteItemClick(item) {
+            var me = this;
+            me.deleteItem(item);
         }
 
         function _updateItemInList(item) {
@@ -696,6 +702,7 @@ $(function () {
                 $li.append('<div class="lobilist-item-duedate">' + item.dueDate + '</div>');
             }
             $li.data('lobiListItem', item);
+            _triggerEvent('afterItemUpdate', [me, item]);
         }
 
         function _triggerEvent(type, data) {
@@ -709,6 +716,15 @@ $(function () {
         function _removeItemFromList(item) {
             me.$lobiList.$el.find('li[data-id=' + item.id + ']').remove();
             _triggerEvent('afterItemDelete', [me, item]);
+        }
+
+        function _sendAjax(url, params) {
+            return $.ajax(url, _beforeAjaxSent(params))
+        }
+
+        function _beforeAjaxSent(params){
+            var eventParams = _triggerEvent('beforeAjaxSent', [me, params]);
+            return $.extend({}, params, eventParams || {});
         }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -732,15 +748,16 @@ $(function () {
 //----------------PROTOTYPE FUNCTIONS-------------------------------------------
 //------------------------------------------------------------------------------
         /**
+         * Add new list
          *
-         * @param {Object} list
-         * @returns {List}
+         * @param {List} list - The <code>List</code> instance to add
+         * @returns {List} Just added <code>List</code> instance
          */
         this.addList = function (list) {
             if (!(list instanceof List)) {
                 list = new List(me, _processListOptions(list));
             }
-            if (_triggerEvent('beforeListAdd', [me, list]) !== false){
+            if (_triggerEvent('beforeListAdd', [me, list]) !== false) {
                 me.$lists.push(list);
                 me.$el.append(list.$elWrapper);
                 list.$el.data('lobiList', list);
@@ -749,6 +766,11 @@ $(function () {
             return list;
         };
 
+        /**
+         * Destroy the <code>LobiList</code>.
+         *
+         * @returns {LobiList}
+         */
         this.destroy = function () {
             if (_triggerEvent('beforeDestroy', [me]) !== false) {
                 for (var i = 0; i < me.$lists.length; i++) {
@@ -760,9 +782,7 @@ $(function () {
                 _triggerEvent('afterDestroy', [me]);
             }
 
-            // me.$el.removeClass("lobilists").html("");
-            // delete me.$options;
-            console.log(me);
+            return me;
         };
 
         /**
@@ -792,8 +812,8 @@ $(function () {
         function _processListOptions(listOptions) {
             listOptions = $.extend({}, $.fn.lobiList.OPTIONS.listsOptions, listOptions);
 
-            for (var i in me.$options){
-                if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined){
+            for (var i in me.$options) {
+                if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined) {
                     listOptions[i] = me.$options[i];
                 }
             }
@@ -815,7 +835,7 @@ $(function () {
                     forcePlaceholderSize: true,
                     opacity: 0.9,
                     revert: 70,
-                    update: function(event, ui){
+                    update: function (event, ui) {
                         _triggerEvent('afterListReorder', [me, ui.item.find('.lobilist').data('lobiList')]);
                     }
                 });
@@ -906,14 +926,14 @@ $(function () {
          * @param {LobiList} The <code>LobiList</code> instance
          */
         init: null,
-        
+
         /**
          * @event beforeDestroy
          * Fires before <code>Lobilist</code> is destroyed. Return false if you do not want <code>LobiList</code> to be destroyed.
          * @param {LobiList} The <code>LobiList</code> to be destroyed
          */
         beforeDestroy: null,
-        
+
         /**
          * @event afterDestroy
          * Fires after <code>Lobilist</code> is destroyed.
@@ -1029,6 +1049,16 @@ $(function () {
          * @param {List} The <code>List</code> instance
          * @param {Object} The jQuery checkbox object
          */
-        afterMarkAsUndone: null
+        afterMarkAsUndone: null,
+
+        /**
+         * @event beforeAjaxSent
+         * Fires before ajax call is sent to backend. This event is very useful is you want to add default parameters
+         * or headers to every request. Such as CSRF token parameter or Access Token header
+         * @param {List} The <code>List</code> instance
+         * @param {Object} The jquery ajax parameters object. You can add additional headers or parameters
+         * to this object and must return the object which will be used for sending request
+         */
+        beforeAjaxSent: null
     };
 });
