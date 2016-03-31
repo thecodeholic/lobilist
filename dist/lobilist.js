@@ -1,20 +1,6 @@
-//Author      : @arboshiki
 /**
- * Generates random string of n length.
- * String contains only letters and numbers
- *
- * @param {int} n
- * @returns {String}
+ * 
  */
-Math.randomString = function (n) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < n; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-};
 $(function () {
     var List = function ($lobiList, options) {
 //------------------------------------------------------------------------------
@@ -244,13 +230,31 @@ $(function () {
 //------------------------------------------------------------------------------
 //-----------------PRIVATE FUNCTIONS--------------------------------------------
 //------------------------------------------------------------------------------
+
+        /**
+         * Generates random string of n length.
+         * String contains only letters and numbers
+         *
+         * @param {int} n - The length of the string
+         * @returns {String} Generated String
+         */
+        function _randomString (n) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < n; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
         function _processItemData(item) {
             return $.extend({}, $.fn.lobiList.OPTIONS.itemOptions, item);
         }
 
         function _init() {
             if (!me.$options.id) {
-                me.$options.id = Math.randomString(10);
+                me.$options.id = _randomString(10);
             }
             var $wrapper = $('<div>', {
                 'class': 'lobilist-wrapper'
