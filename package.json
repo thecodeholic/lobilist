@@ -1,7 +1,7 @@
 {
   "name": "lobilist",
   "version": "1.0.0",
-  "description": "jQuery plugin for todo lists. Supports drag & drop issues. Multiple lists with different colors. Support for communication to backend",
+  "description": "jQuery plugin for todo lists. Supports drag & drop of todos. Multiple lists with different colors. Support for communication to backend",
   "license": "MIT",
   "keywords": [
     "jQuery",

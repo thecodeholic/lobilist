@@ -1,7 +1,20 @@
 /**
+ * @name LobiList - Responsive jQuery todo list plugin
+ * LobiList is todo list jquery plugin. Support multiple list with different styles, communication to backend, drag & drop of todos
  *
+ * @author Zura Sekhniashvili <zurasekhniashvili@gmail.com>
+ * @version 1.0.0
+ * @licence MIT
  */
 $(function () {
+    /**
+     * List class
+     *
+     * @class
+     * @param {Object} $lobiList - jQuery element
+     * @param {Object} options - Options for <code>List</code> 'class'
+     * @constructor
+     */
     var List = function ($lobiList, options) {
 //------------------------------------------------------------------------------
 //----------------PROTOTYPE VARIABLES-------------------------------------------
@@ -737,6 +750,14 @@ $(function () {
         _init();
     };
 //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+    /**
+     * LobiList class
+     *
+     * @param {Object} $el - jQuery element
+     * @param {Object} options - Options for <code>LobiList</code> 'class'
+     * @constructor
+     */
     var LobiList = function ($el, options) {
 //------------------------------------------------------------------------------
 //----------------PROTOTYPE VARIABLES-------------------------------------------
