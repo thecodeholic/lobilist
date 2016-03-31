@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 $(function () {
     var List = function ($lobiList, options) {
@@ -112,10 +112,10 @@ $(function () {
         this.deleteItem = function (item, errorCallback) {
             if (me.$globalOptions.actions.delete) {
                 return _sendAjax(me.$globalOptions.actions.delete, {
-                        data: item,
-                        method: 'POST'
-                    })
-                    //res is JSON object of format
+                    data: item,
+                    method: 'POST'
+                })
+                //res is JSON object of format
                     .done(function (res) {
                         if (res.success) {
                             _removeItemFromList(item);
@@ -238,7 +238,7 @@ $(function () {
          * @param {int} n - The length of the string
          * @returns {String} Generated String
          */
-        function _randomString (n) {
+        function _randomString(n) {
             var text = "";
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -249,7 +249,7 @@ $(function () {
         }
 
         function _processItemData(item) {
-            return $.extend({}, $.fn.lobiList.OPTIONS.itemOptions, item);
+            return $.extend({}, me.$globalOptions.itemOptions, item);
         }
 
         function _init() {
@@ -497,14 +497,14 @@ $(function () {
                 'class': 'dropdown-menu dropdown-menu-right'
             }).appendTo($dropdown);
 
-            for (var i = 0; i < $.fn.lobiList.OPTIONS.listStyles.length; i++) {
-                var st = $.fn.lobiList.OPTIONS.listStyles[i];
+            for (var i = 0; i < me.$globalOptions.listStyles.length; i++) {
+                var st = me.$globalOptions.listStyles[i];
                 $('<div class="' + st + '"></div>')
                     .on('mousedown', function (ev) {
                         ev.stopPropagation()
                     })
                     .click(function () {
-                        me.$el.removeClass($.fn.lobiList.OPTIONS.listStyles.join(" "))
+                        me.$el.removeClass(me.$globalOptions.listStyles.join(" "))
                             .addClass(this.className);
                     })
                     .appendTo($menu);
@@ -726,10 +726,11 @@ $(function () {
             return $.ajax(url, _beforeAjaxSent(params))
         }
 
-        function _beforeAjaxSent(params){
+        function _beforeAjaxSent(params) {
             var eventParams = _triggerEvent('beforeAjaxSent', [me, params]);
             return $.extend({}, params, eventParams || {});
         }
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -814,7 +815,7 @@ $(function () {
         }
 
         function _processListOptions(listOptions) {
-            listOptions = $.extend({}, $.fn.lobiList.OPTIONS.listsOptions, listOptions);
+            listOptions = $.extend({}, me.$options.listsOptions, listOptions);
 
             for (var i in me.$options) {
                 if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined) {
@@ -888,7 +889,7 @@ $(function () {
             }
         });
     };
-    $.fn.lobiList.OPTIONS = {
+    $.fn.lobiList.DEFAULT_OPTIONS = {
         'listStyles': ['lobilist-default', 'lobilist-danger', 'lobilist-success', 'lobilist-warning', 'lobilist-info', 'lobilist-primary'],
         listsOptions: {
             id: false,
@@ -901,10 +902,8 @@ $(function () {
             description: '',
             dueDate: '',
             done: false
-        }
+        },
 
-    };
-    $.fn.lobiList.DEFAULT_OPTIONS = {
         lists: [],
         // Urls to communicate to backend
         actions: {
