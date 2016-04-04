@@ -11,8 +11,9 @@ jQuery plugin for todo lists. Supports drag & drop of todos. Multiple lists with
 - Drag & drop todos
 - Ajax configuration urls for todo CRUD
 - Checkboxes to mark/unmark todo as done
+- Powerful event management
 
-### Installation and dependecies
+### Installation and dependencies
 
 LobiList is depended on jQuery, jQuery ui and bootstrap.
 

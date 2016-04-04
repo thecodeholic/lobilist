@@ -14,6 +14,17 @@ $(function () {
         hljs.highlightBlock(el);
     });
 
+    //Basic example
+    (function(){
+        $('#todo-lists-basic-demo').lobiList({
+            lists: [
+                {
+                    title: 'TODO'
+                }
+            ]
+        });
+    })();
+
     $('#todo-lists-demo-sorting').lobiList({
         sortable: false,
         lists: [
@@ -96,10 +107,12 @@ $(function () {
         ]
     });
 
+    // Event handling
     (function () {
         var list;
 
         $('#todo-lists-initialize-btn').click(function () {
+            console.log("initialize");
             list = $('#todo-lists-demo-events')
                 .lobiList({
                     init: function(){

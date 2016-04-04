@@ -46,15 +46,12 @@
                     <h3>Usage</h3>
                     <p>LobiList initialization is simple. Just create an empty <code>&lt;div&gt;</code> and call plugin.</p>
                     <div class="highlight">
-                        <pre>
-<code class="html">&ltdiv id="todo-lists-demo">&lt;/div>
-&lt;script>
-</code><code class="javascript">    $(function(){
+                        <pre><code class="html">&ltdiv id="todo-lists-demo">&lt;/div>
+&lt;script></code><code class="javascript">    $(function(){
         $('#todo-lists-demo').lobiList({
             //Options
         });
-    });</code>
-<code class="html">&lt;/script&gt;</code>
+    });</code><code class="html">&lt;/script&gt;</code>
                         </pre>
                     </div>
                     <p>Plugin contains 2 internal classes: <code>LobiList</code> and <code>List</code>.</p>
@@ -85,6 +82,23 @@
                     <div>
                         <div class="bs-example">
                             <h4>Basic example</h4>
+                            <div id="todo-lists-basic-demo"></div>
+                        </div>
+                        <div class="highlight">
+                            <pre><code>$('selector').lobiList({
+    lists: [
+        {
+            title: 'TODO'
+        }
+    ]
+});
+</code></pre>
+                        </div>
+                    </div>
+                    <!--Example with initialized todos -->
+                    <div>
+                        <div class="bs-example">
+                            <h4>Basic example with initialized todos</h4>
                             <div id="todo-lists-demo"></div>
                         </div>
                         <div class="highlight">

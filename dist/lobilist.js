@@ -805,6 +805,11 @@ $(function () {
                 if (me.$options.sortable) {
                     me.$el.sortable("destroy");
                 }
+                me.$el.removeClass('lobilists');
+                if (me.$options.onSingleLine){
+                    me.$el.removeClass('single-line');
+                }
+                me.$el.removeData('lobiList');
                 _triggerEvent('afterDestroy', [me]);
             }
 
