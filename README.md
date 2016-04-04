@@ -22,24 +22,36 @@ LobiList is depended on jQuery, jQuery ui and bootstrap.
 <!DOCTYPE html>
 <html>
    <head>
-      <!--Include this css file in the <head> tag -->
-      <link rel="stylesheet" href="lib/jquery-ui.min.css"/>
-      <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"/>
-      <link rel="stylesheet" href="dist/css/lobipanel.min.css"/>
+        <!--Default installation-->
+        <link rel="stylesheet" href="lib/jquery/jquery-ui.min.css"/>
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+
+        <!--Installation using bower. Preferred!!! -->
+        <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>-->
+        <!--<link rel="stylesheet" href="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css"/>-->
+
+        <link rel="stylesheet" href="dist/lobilist.min.css">
    </head>
 
    <body>
-      ...
-      <!--Include these script files in the <head> or <body> tag-->
-      <script src="lib/jquery.1.11.min.js"></script>
-      <script src="lib/jquery-ui.min.js"></script>
-      <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-      <script src="dist/js/lobipanel.min.js"></script>
+        <!--Default installation-->
+        <script src="lib/jquery/jquery.min.js"></script>
+        <script src="lib/jquery/jquery-ui.min.js"></script>
+        <script src="lib/jquery/jquery.ui.touch-punch-improved.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+        <!--Installation using bower. Preferred!!! -->
+        <!--<script src="bower_components/jquery/dist/jquery.min.js"></script>-->
+        <!--<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
+        <!--<script src="bower_components/jquery-ui-touch-punch-improved/jquery.ui.touch-punch-improved.js"></script>-->
+        <!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+
+        <script src="dist/lobilist.min.js"></script>
    </body>
 </html>
 ```
 
 #### 2. Initialize plugin and use it
 
-### For documentation and examples visit the plugin's [home page](http://lobianijs.com/site/lobipanel)
+### For documentation and examples visit the plugin's [home page](http://lobianijs.com/site/lobilist)
 
