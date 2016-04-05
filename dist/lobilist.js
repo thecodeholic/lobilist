@@ -776,7 +776,7 @@ $(function () {
         /**
          * Add new list
          *
-         * @param {List} list - The <code>List</code> instance to add
+         * @param {List|Object} list - The <code>List</code> instance to add
          * @returns {List} Just added <code>List</code> instance
          */
         this.addList = function (list) {
@@ -916,12 +916,15 @@ $(function () {
         });
     };
     $.fn.lobiList.DEFAULT_OPTIONS = {
+        // Available style for lists
         'listStyles': ['lobilist-default', 'lobilist-danger', 'lobilist-success', 'lobilist-warning', 'lobilist-info', 'lobilist-primary'],
+        // Default options for all lists
         listsOptions: {
             id: false,
             title: '',
             items: []
         },
+        // Default options for all todo items
         itemOptions: {
             id: false,
             title: '',
@@ -931,21 +934,26 @@ $(function () {
         },
 
         lists: [],
-        // Urls to communicate to backend
+        // Urls to communicate to backend for todos
         actions: {
             'load': '',
             'update': '',
             'insert': '',
             'delete': ''
         },
+        // Whether to show checkboxes or not
         useCheckboxes: true,
-        enableTodoAdd: false,
+        // Show/hide todo remove button
         enableTodoRemove: true,
+        // Show/hide todo edit button
         enableTodoEdit: true,
+        // Whether to make lists and todos sortable
         sortable: true,
+        // Default action buttons for all lists
         controls: ['edit', 'add', 'remove', 'styleChange'],
-        //List style. Available options: 'lobilist-default', 'lobilist-info', 'lobilist-success', 'lobilist-danger', 'lobilist-warning', 'lobilist-primary'
+        //List style
         defaultStyle: 'lobilist-default',
+        // Whether to show lists on single line or not
         onSingleLine: true,
 
         // Events
