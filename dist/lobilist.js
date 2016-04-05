@@ -884,7 +884,7 @@ $(function () {
 
         function _triggerEvent(type, data) {
             if (me.$options[type] && typeof me.$options[type] === 'function') {
-                return me.$options[type].call(me, data);
+                return me.$options[type].apply(me, data);
             } else {
                 return me.$el.trigger(type, data);
             }

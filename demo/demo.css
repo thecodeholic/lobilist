@@ -2,11 +2,9 @@ body {
     position: relative;
     padding-top: 60px
 }
-
 .navbar-brand {
     padding-top: 8px
 }
-
 #sidebar {
     height: 90%;
     border-left: 1px solid #EEE;
@@ -14,38 +12,33 @@ body {
     overflow-y: auto;
     min-width: 240px
 }
-
 .docs-sidenav li>a {
     padding: 5px 10px
 }
-
 .docs-sidenav li .active {
     border-left: 2px solid #346b99;
     background-color: rgba(0,0,0,.02)
 }
-
 .docs-sidenav li .active>a {
     text-shadow: 2px 2px 3px rgba(0,0,0,.4)
 }
-
 .docs-sidenav li .active .nav {
     height: auto;
     opacity: 1
 }
-
 .docs-sidenav li .active .nav>li .active {
     border-left: none
 }
-
 .docs-sidenav .nav {
     height: 0;
     overflow: hidden;
     opacity: 0
 }
-
 .docs-sidenav .nav>li>a {
     padding-left: 30px
 }
+
+
 
 .bs-example {
     background-color: #FFF;
