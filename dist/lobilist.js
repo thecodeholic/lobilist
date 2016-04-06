@@ -211,7 +211,7 @@ $(function () {
         /**
          * Remove list
          *
-         * @returns {List}
+         * @returns {List} - Just removed <code>List</code> instance
          */
         this.remove = function () {
             me.$lobiList.$lists.splice(me.$el.index(), 1);
@@ -223,7 +223,7 @@ $(function () {
         /**
          * Start editing of item
          *
-         * @param {number} id - The id of the item to start updating
+         * @param {String} id - The id of the item to start updating
          * @returns {List}
          */
         this.editItem = function (id) {
@@ -776,7 +776,7 @@ $(function () {
         /**
          * Add new list
          *
-         * @param {List|Object} list - The <code>List</code> instance to add
+         * @param {List|Object} list - The <code>List</code> instance or <code>Object</code>
          * @returns {List} Just added <code>List</code> instance
          */
         this.addList = function (list) {
