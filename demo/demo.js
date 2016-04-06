@@ -1,37 +1,67 @@
 /**
- * Created by Zura on 3/22/2016.
+ * Created by Zura on 4/5/2016.
  */
 $(function () {
-
     Lobibox.notify.DEFAULTS = $.extend({}, Lobibox.notify.DEFAULTS, {
         size: 'mini',
         // delay: false,
         position: 'right top'
     });
 
-    var codes = $('.highlight code');
-    codes.each(function (ind, el) {
-        hljs.highlightBlock(el);
-    });
-
     //Basic example
-    (function(){
-        $('#todo-lists-basic-demo').lobiList({
-            lists: [
-                {
-                    title: 'TODO'
-                }
-            ]
-        });
-    })();
-
-    $('#todo-lists-demo-sorting').lobiList({
-        sortable: false,
+    $('#todo-lists-basic-demo').lobiList({
         lists: [
             {
                 title: 'TODO',
                 defaultStyle: 'lobilist-info',
-                controls: ['edit', 'styleChange'],
+                items: [
+                    {
+                        title: 'Floor cool cinders',
+                        description: 'Thunder fulfilled travellers folly, wading, lake.',
+                        dueDate: '2015-01-31'
+                    },
+                    {
+                        title: 'Periods pride',
+                        description: 'Accepted was mollis',
+                        done: true
+                    },
+                    {
+                        title: 'Flags better burns pigeon',
+                        description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.'
+                    },
+                    {
+                        title: 'Accepted was mollis',
+                        description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                        dueDate: '2015-02-02'
+                    }
+                ]
+            },
+            {
+                title: 'DOING',
+                items: [
+                    {
+                        title: 'Composed trays',
+                        description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.'
+                    },
+                    {
+                        title: 'Chic leafy'
+                    },
+                    {
+                        title: 'Guessed interdum armies chirp writhes most',
+                        description: 'Came champlain live leopards twilight whenever warm read wish squirrel rock.',
+                        dueDate: '2015-02-04',
+                        done: true
+                    }
+                ]
+            }
+        ]
+    });
+    //Custom datepicker
+    $('#todo-lists-demo-datepicker').lobiList({
+        lists: [
+            {
+                title: 'TODO',
+                defaultStyle: 'lobilist-info',
                 items: [
                     {
                         title: 'Floor cool cinders',
@@ -39,19 +69,153 @@ $(function () {
                         dueDate: '2015-01-31'
                     }
                 ]
-            },
-            {
-                title: 'Controls disabled',
-                controls: false,
-                items: [
-                    {
-                        title: 'Composed trays',
-                        description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.'
-                    }
-                ]
             }
-        ]
+        ],
+        afterListAdd: function(lobilist, list){
+            var $dueDateInput = list.$el.find('form [name=dueDate]');
+            $dueDateInput.datepicker();
+        }
     });
+    // Event handling
+    (function () {
+        var list;
+
+        $('#todo-lists-initialize-btn').click(function () {
+            list = $('#todo-lists-demo-events')
+                .lobiList({
+                    init: function () {
+                        Lobibox.notify('default', {
+                            msg: 'init'
+                        });
+                    },
+                    beforeDestroy: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeDestroy'
+                        });
+                    },
+                    afterDestroy: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterDestroy'
+                        });
+                    },
+                    beforeListAdd: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeListAdd'
+                        });
+                    },
+                    afterListAdd: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterListAdd'
+                        });
+                    },
+                    beforeListRemove: function (list) {
+                        Lobibox.notify('default', {
+                            msg: 'beforeListRemove'
+                        });
+                    },
+                    afterListRemove: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterListRemove'
+                        });
+                    },
+                    beforeItemAdd: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeItemAdd'
+                        });
+                    },
+                    afterItemAdd: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterItemAdd'
+                        });
+                    },
+                    beforeItemUpdate: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeItemUpdate'
+                        });
+                    },
+                    afterItemUpdate: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterItemUpdate'
+                        });
+                    },
+                    beforeItemDelete: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeItemDelete'
+                        });
+                    },
+                    afterItemDelete: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterItemDelete'
+                        });
+                    },
+                    beforeListDrop: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeListDrop'
+                        });
+                    },
+                    afterListReorder: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterListReorder'
+                        });
+                    },
+                    beforeItemDrop: function () {
+                        Lobibox.notify('default', {
+                            msg: 'beforeItemDrop'
+                        });
+                    },
+                    afterItemReorder: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterItemReorder'
+                        });
+                    },
+                    afterMarkAsDone: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterMarkAsDone'
+                        });
+                    },
+                    afterMarkAsUndone: function () {
+                        Lobibox.notify('default', {
+                            msg: 'afterMarkAsUndone'
+                        });
+                    },
+                    lists: [
+                        {
+                            title: 'TODO',
+                            defaultStyle: 'lobilist-info',
+                            items: [
+                                {
+                                    title: 'Floor cool cinders',
+                                    description: 'Thunder fulfilled travellers folly, wading, lake.',
+                                    dueDate: '2015-01-31'
+                                },
+                                {
+                                    title: 'Periods pride',
+                                    description: 'Accepted was mollis',
+                                    done: true
+                                },
+                                {
+                                    title: 'Flags better burns pigeon',
+                                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
+                                    'treacherously darkling.'
+                                },
+                                {
+                                    title: 'Accepted was mollis',
+                                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
+                                    'treacherously darkling.',
+                                    dueDate: '2015-02-02'
+                                }
+                            ]
+                        }
+                    ]
+                })
+                .data('lobiList');
+        });
+
+        $('#todo-lists-destroy-btn').click(function () {
+            list.destroy();
+        });
+    })();
+    // Custom controls
     $('#todo-lists-demo-controls').lobiList({
         lists: [
             {
@@ -106,210 +270,29 @@ $(function () {
             }
         ]
     });
-
-    // Event handling
-    (function () {
-        var list;
-
-        $('#todo-lists-initialize-btn').click(function () {
-            console.log("initialize");
-            list = $('#todo-lists-demo-events')
-                .lobiList({
-                    init: function(){
-                        console.log('init', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'init'
-                        });
-                    },
-                    beforeDestroy: function(){
-                        console.log('beforeDestroy', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeDestroy'
-                        });
-                    },
-                    afterDestroy: function(){
-                        console.log('afterDestroy', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterDestroy'
-                        });
-                    },
-                    beforeListAdd: function(){
-                        console.log('beforeListAdd', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeListAdd'
-                        });
-                    },
-                    afterListAdd: function(){
-                        console.log('afterListAdd', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterListAdd'
-                        });
-                    },
-                    beforeListRemove: function(list){
-                        console.log('beforeListRemove', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeListRemove'
-                        });
-                    },
-                    afterListRemove: function(){
-                        console.log('afterListRemove', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterListRemove'
-                        });
-                    },
-                    beforeItemAdd: function(){
-                        console.log('beforeItemAdd', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeItemAdd'
-                        });
-                    },
-                    afterItemAdd: function(){
-                        console.log('afterItemAdd', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterItemAdd'
-                        });
-                    },
-                    beforeItemUpdate: function(){
-                        console.log('beforeItemUpdate', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeItemUpdate'
-                        });
-                    },
-                    afterItemUpdate: function(){
-                        console.log('afterItemUpdate', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterItemUpdate'
-                        });
-                    },
-                    beforeItemDelete: function(){
-                        console.log('beforeItemDelete', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeItemDelete'
-                        });
-                    },
-                    afterItemDelete: function(){
-                        console.log('afterItemDelete', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterItemDelete'
-                        });
-                    },
-                    beforeListDrop: function(){
-                        console.log('beforeListDrop', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeListDrop'
-                        });
-                    },
-                    afterListReorder: function(){
-                        console.log('afterListReorder', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterListReorder'
-                        });
-                    },
-                    beforeItemDrop: function(){
-                        console.log('beforeItemDrop', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'beforeItemDrop'
-                        });
-                    },
-                    afterItemReorder: function(){
-                        console.log('afterItemReorder', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterItemReorder'
-                        });
-                    },
-                    afterMarkAsDone: function(){
-                        console.log('afterMarkAsDone', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterMarkAsDone'
-                        });
-                    },
-                    afterMarkAsUndone: function(){
-                        console.log('afterUnmarkAsDone', arguments);
-                        Lobibox.notify('default', {
-                            msg: 'afterMarkAsUndone'
-                        });
-                    },
-                    lists: [
-                        {
-                            title: 'TODO',
-                            defaultStyle: 'lobilist-info',
-                            items: [
-                                {
-                                    title: 'Floor cool cinders',
-                                    description: 'Thunder fulfilled travellers folly, wading, lake.',
-                                    dueDate: '2015-01-31'
-                                },
-                                {
-                                    title: 'Periods pride',
-                                    description: 'Accepted was mollis',
-                                    done: true
-                                },
-                                {
-                                    title: 'Flags better burns pigeon',
-                                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
-                                    'treacherously darkling.'
-                                },
-                                {
-                                    title: 'Accepted was mollis',
-                                    description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank ' +
-                                    'treacherously darkling.',
-                                    dueDate: '2015-02-02'
-                                }
-                            ]
-                        }
-                    ]
-                })
-                .data('lobiList');
-        });
-
-        $('#todo-lists-destroy-btn').click(function () {
-            list.destroy();
-        });
-    })();
-
-
-    $('#todo-lists-demo').lobiList({
+    // Disabled drag & drop
+    $('#todo-lists-demo-sorting').lobiList({
+        sortable: false,
         lists: [
             {
                 title: 'TODO',
                 defaultStyle: 'lobilist-info',
+                controls: ['edit', 'styleChange'],
                 items: [
                     {
                         title: 'Floor cool cinders',
                         description: 'Thunder fulfilled travellers folly, wading, lake.',
                         dueDate: '2015-01-31'
-                    },
-                    {
-                        title: 'Periods pride',
-                        description: 'Accepted was mollis',
-                        done: true
-                    },
-                    {
-                        title: 'Flags better burns pigeon',
-                        description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.'
-                    },
-                    {
-                        title: 'Accepted was mollis',
-                        description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
-                        dueDate: '2015-02-02'
                     }
                 ]
             },
             {
-                title: 'DOING',
+                title: 'Controls disabled',
+                controls: false,
                 items: [
                     {
                         title: 'Composed trays',
                         description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.'
-                    },
-                    {
-                        title: 'Chic leafy'
-                    },
-                    {
-                        title: 'Guessed interdum armies chirp writhes most',
-                        description: 'Came champlain live leopards twilight whenever warm read wish squirrel rock.',
-                        dueDate: '2015-02-04',
-                        done: true
                     }
                 ]
             }
