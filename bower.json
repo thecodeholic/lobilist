@@ -22,7 +22,6 @@
   ],
   "homepage": "https://github.com/arboshiki/lobilist",
   "moduleType": [],
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
