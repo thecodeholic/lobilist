@@ -41,6 +41,7 @@ $(function () {
          * If <code>response.success</code> is true item is added.
          * Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
+         * @method addItem
          * @param {Object} item - The item <code>Object</code>
          * @param {Function} errorCallback - The callback which is called when server returned response but
          * <code>response.success=false</code>
@@ -81,6 +82,7 @@ $(function () {
          * If <code>response.success</code> is true item is updated.
          * Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
+         * @method updateItem
          * @param {Object} item  - The item <code>Object</code> to update
          * @param {Function} errorCallback - The callback which is called when server returned response but
          * <code>response.success=false</code>
@@ -117,6 +119,7 @@ $(function () {
          * If <code>response.success=true</code> item is deleted from the list and <code>afterItemDelete</code> event
          * if triggered. Otherwise <code>errorCallback</code> callback is called if it was provided.
          *
+         * @method deleteItem
          * @param {Object} item - The item <code>Object</code> to delete
          * @param {Function} errorCallback - The callback which is called when server returned response but
          * <code>response.success=false</code>
@@ -148,6 +151,7 @@ $(function () {
          * If item does not have id, it is considered as new and is added to the list.
          * If it has id it is updated. If update and insert actions are provided corresponding request is sent to the server
          *
+         * @method saveOrUpdateItem
          * @param {Object} item  - The item <code>Object</code>
          * @param {Function} errorCallback - The callback which is called when server returned response but
          * <code>response.success=false</code>
@@ -165,6 +169,7 @@ $(function () {
         /**
          * Start title editing
          *
+         * @method startTitleEditing
          * @returns {List}
          */
         this.startTitleEditing = function () {
@@ -182,6 +187,7 @@ $(function () {
         /**
          * Finish title editing
          *
+         * @method finishTitleEditing
          * @returns {List}
          */
         this.finishTitleEditing = function () {
@@ -195,6 +201,7 @@ $(function () {
         /**
          * Cancel title editing
          *
+         * @method cancelTitleEditing
          * @returns {List}
          */
         this.cancelTitleEditing = function () {
@@ -211,6 +218,7 @@ $(function () {
         /**
          * Remove list
          *
+         * @method remove
          * @returns {List} - Just removed <code>List</code> instance
          */
         this.remove = function () {
@@ -223,6 +231,7 @@ $(function () {
         /**
          * Start editing of item
          *
+         * @method editItem
          * @param {String} id - The id of the item to start updating
          * @returns {List}
          */
@@ -776,6 +785,7 @@ $(function () {
         /**
          * Add new list
          *
+         * @method addList
          * @param {List|Object} list - The <code>List</code> instance or <code>Object</code>
          * @returns {List} Just added <code>List</code> instance
          */
@@ -795,6 +805,7 @@ $(function () {
         /**
          * Destroy the <code>LobiList</code>.
          *
+         * @method destroy
          * @returns {LobiList}
          */
         this.destroy = function () {
@@ -819,6 +830,7 @@ $(function () {
         /**
          * Get next id which will be assigned to new item
          *
+         * @method getNextId
          * @returns {Number}
          */
         this.getNextId = function () {
