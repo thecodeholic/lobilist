@@ -709,7 +709,6 @@ $(function () {
         }
 
         function _onDeleteItemClick(item) {
-            var me = this;
             me.deleteItem(item);
         }
 
