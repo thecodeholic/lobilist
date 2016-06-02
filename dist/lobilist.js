@@ -55,9 +55,9 @@ $(function () {
             item = _processItemData(item);
             if (me.$globalOptions.actions.insert) {
                 $.ajax(me.$globalOptions.actions.insert, {
-                        data: item,
-                        method: 'POST'
-                    })
+                    data: item,
+                    method: 'POST'
+                })
                     //res is JSON object of format {"success": Boolean, "id": Number, "msg": String}
                     .done(function (res) {
                         if (res.success) {
@@ -94,9 +94,9 @@ $(function () {
             }
             if (me.$globalOptions.actions.update) {
                 $.ajax(me.$globalOptions.actions.update, {
-                        data: item,
-                        method: 'POST'
-                    })
+                    data: item,
+                    method: 'POST'
+                })
                     //res is JSON object of format {"id": Number, "success": Boolean, "msg": String}
                     .done(function (res) {
                         if (res.success) {
@@ -134,7 +134,7 @@ $(function () {
                     data: item,
                     method: 'POST'
                 })
-                //res is JSON object of format
+                    //res is JSON object of format
                     .done(function (res) {
                         if (res.success) {
                             _removeItemFromList(item);
@@ -200,7 +200,7 @@ $(function () {
             $input.remove();
             $header.removeClass('title-editing');
             console.log(oldTitle, $input.val());
-            _triggerEvent('titleChange', [me, oldTitle, $input.val()]);
+            _triggerEvent('titleChange', [me, oldTitle, $input.val()])
             return me;
         };
 
@@ -534,8 +534,8 @@ $(function () {
                     .click(function () {
                         var classes = me.$el[0].className.split(' ');
                         var oldClass = null;
-                        for (var i = 0; i < classes.length; i++){
-                            if (me.$globalOptions.listStyles.indexOf(classes[i]) > -1){
+                        for (var i = 0; i < classes.length; i++) {
+                            if (me.$globalOptions.listStyles.indexOf(classes[i]) > -1) {
                                 oldClass = classes[i];
                             }
                         }
@@ -783,79 +783,35 @@ $(function () {
      * @constructor
      */
     var LobiList = function ($el, options) {
-//------------------------------------------------------------------------------
-//----------------PROTOTYPE VARIABLES-------------------------------------------
-//------------------------------------------------------------------------------
-        this.$el = null;
-        this.$lists = [];
-        this.$options = {};
-//------------------------------------------------------------------------------
-//-----------------PRIVATE VARIABLES--------------------------------------------
-//------------------------------------------------------------------------------
-        var me = this,
-            _nextId = 1;
-//------------------------------------------------------------------------------
-//----------------PROTOTYPE FUNCTIONS-------------------------------------------
-//------------------------------------------------------------------------------
-        /**
-         * Add new list
-         *
-         * @method addList
-         * @param {List|Object} list - The <code>List</code> instance or <code>Object</code>
-         * @returns {List} Just added <code>List</code> instance
-         */
-        this.addList = function (list) {
-            if (!(list instanceof List)) {
-                list = new List(me, _processListOptions(list));
+        this.$el = $el;
+        this.init(options);
+    };
+
+    LobiList.prototype = {
+        $el: null,
+        $lists: [],
+        $options: {},
+        _nextId: 1,
+
+        init: function (options) {
+            var me = this;
+            me.$el.addClass('lobilists');
+            if (me.$options.onSingleLine) {
+                me.$el.addClass('single-line');
             }
-            if (_triggerEvent('beforeListAdd', [me, list]) !== false) {
-                me.$lists.push(list);
-                me.$el.append(list.$elWrapper);
-                list.$el.data('lobiList', list);
-                _triggerEvent('afterListAdd', [me, list]);
-            }
-            return list;
-        };
+            me.$options = this._processInput(options);
+            me._createLists();
+            me._handleSortable();
+            me._triggerEvent('init', [me]);
+        },
 
         /**
-         * Destroy the <code>LobiList</code>.
          *
-         * @method destroy
-         * @returns {LobiList}
+         * @param options
+         * @returns {*}
+         * @private
          */
-        this.destroy = function () {
-            if (_triggerEvent('beforeDestroy', [me]) !== false) {
-                for (var i = 0; i < me.$lists.length; i++) {
-                    me.$lists[i].remove();
-                }
-                if (me.$options.sortable) {
-                    me.$el.sortable("destroy");
-                }
-                me.$el.removeClass('lobilists');
-                if (me.$options.onSingleLine){
-                    me.$el.removeClass('single-line');
-                }
-                me.$el.removeData('lobiList');
-                _triggerEvent('afterDestroy', [me]);
-            }
-
-            return me;
-        };
-
-        /**
-         * Get next id which will be assigned to new item
-         *
-         * @method getNextId
-         * @returns {Number}
-         */
-        this.getNextId = function () {
-            return _nextId++;
-        };
-
-//------------------------------------------------------------------------------
-//-----------------PRIVATE FUNCTIONS--------------------------------------------
-//------------------------------------------------------------------------------
-        function _processInput(options) {
+        _processInput: function (options) {
             options = $.extend({}, $.fn.lobiList.DEFAULT_OPTIONS, options);
             if (options.actions.load) {
                 $.ajax(options.actions.load, {
@@ -865,25 +821,25 @@ $(function () {
                 });
             }
             return options;
-        }
+        },
 
-        function _processListOptions(listOptions) {
-            listOptions = $.extend({}, me.$options.listsOptions, listOptions);
-
-            for (var i in me.$options) {
-                if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined) {
-                    listOptions[i] = me.$options[i];
-                }
+        /**
+         * @private
+         */
+        _createLists: function () {
+            var me = this;
+            for (var i = 0; i < me.$options.lists.length; i++) {
+                me._createList(me.$options.lists[i]);
             }
-            return listOptions;
-        }
+            return me;
+        },
 
-        function _init() {
-            me.$el.addClass('lobilists');
-            if (me.$options.onSingleLine) {
-                me.$el.addClass('single-line');
-            }
-            _createLists();
+        /**
+         * @private
+         * @returns {LobiList}
+         */
+        _handleSortable: function () {
+            var me = this;
             if (me.$options.sortable) {
                 me.$el.sortable({
                     items: '.lobilist-wrapper',
@@ -894,35 +850,120 @@ $(function () {
                     opacity: 0.9,
                     revert: 70,
                     update: function (event, ui) {
-                        _triggerEvent('afterListReorder', [me, ui.item.find('.lobilist').data('lobiList')]);
+                        me._triggerEvent('afterListReorder', [me, ui.item.find('.lobilist').data('lobiList')]);
                     }
                 });
             } else {
                 me.$el.addClass('no-sortable');
             }
-            _triggerEvent('init', [me]);
-        }
+            return me;
+        },
 
-        function _createLists() {
-            for (var i = 0; i < me.$options.lists.length; i++) {
-                me.addList(me.$options.lists[i]);
+        /**
+         *
+         * @param list
+         * @returns {*}
+         * @private
+         */
+        _createList: function(list){
+            var me = this;
+            if (!(list instanceof List)) {
+                list = new List(me, me._processListOptions(list));
             }
-        }
+            me.$lists.push(list);
+            me.$el.append(list.$elWrapper);
+            list.$el.data('lobiList', list);
+            return list;
+        },
 
-        function _triggerEvent(type, data) {
+        /**
+         * Add new list
+         *
+         * @public
+         * @method addList
+         * @param {List|Object} list - The <code>List</code> instance or <code>Object</code>
+         * @returns {List} Just added <code>List</code> instance
+         */
+        addList: function (list) {
+            var me = this,
+                list = null;
+            if (me._triggerEvent('beforeListAdd', [me, list]) !== false) {
+                list = me._createList(list);
+                me._triggerEvent('afterListAdd', [me, list]);
+            }
+            return list;
+        },
+
+        /**
+         * Destroy the <code>LobiList</code>.
+         *
+         * @public
+         * @method destroy
+         * @returns {LobiList}
+         */
+        destroy: function () {
+            var me = this;
+            if (me._triggerEvent('beforeDestroy', [me]) !== false) {
+                for (var i = 0; i < me.$lists.length; i++) {
+                    me.$lists[i].remove();
+                }
+                if (me.$options.sortable) {
+                    me.$el.sortable("destroy");
+                }
+                me.$el.removeClass('lobilists');
+                if (me.$options.onSingleLine) {
+                    me.$el.removeClass('single-line');
+                }
+                me.$el.removeData('lobiList');
+                me._triggerEvent('afterDestroy', [me]);
+            }
+
+            return me;
+        },
+
+        /**
+         * Get next id which will be assigned to new item
+         *
+         * @public
+         * @method getNextId
+         * @returns {Number}
+         */
+        getNextId: function () {
+            return this._nextId++;
+        },
+
+        /**
+         *
+         * @param listOptions
+         * @returns {*}
+         * @private
+         */
+        _processListOptions: function (listOptions) {
+            var me = this;
+            listOptions = $.extend({}, me.$options.listsOptions, listOptions);
+
+            for (var i in me.$options) {
+                if (me.$options.hasOwnProperty(i) && listOptions[i] === undefined) {
+                    listOptions[i] = me.$options[i];
+                }
+            }
+            return listOptions;
+        },
+
+        /**
+         * @param type
+         * @param data
+         * @returns {*}
+         * @private
+         */
+        _triggerEvent: function (type, data) {
+            var me = this;
             if (me.$options[type] && typeof me.$options[type] === 'function') {
                 return me.$options[type].apply(me, data);
             } else {
                 return me.$el.trigger(type, data);
             }
         }
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-        this.$el = $el;
-        this.$options = _processInput(options);
-        _init();
     };
 
     $.fn.lobiList = function (option) {
