@@ -108,7 +108,7 @@ $(function () {
                             msg: 'afterListAdd'
                         });
                     },
-                    beforeListRemove: function (list) {
+                    beforeListRemove: function () {
                         Lobibox.notify('default', {
                             msg: 'beforeListRemove'
                         });
@@ -176,6 +176,18 @@ $(function () {
                     afterMarkAsUndone: function () {
                         Lobibox.notify('default', {
                             msg: 'afterMarkAsUndone'
+                        });
+                    },
+                    styleChange: function(list, oldStyle, newStyle){
+                        console.log(arguments);
+                        Lobibox.notify('default', {
+                            msg: 'styleChange: Old style - "'+oldStyle+'". New style - "'+ newStyle +'"'
+                        });
+                    },
+                    titleChange: function(list, oldTitle, newTitle){
+                        console.log(arguments);
+                        Lobibox.notify('default', {
+                            msg: 'titleChange: Old title - "'+oldTitle+'". New title - "'+ newTitle + '"'
                         });
                     },
                     lists: [

@@ -195,9 +195,12 @@ $(function () {
          */
         this.finishTitleEditing = function () {
             var $input = $header.find('input');
+            var oldTitle = $title.attr('data-old-title');
             $title.html($input.val()).removeClass('hide').removeAttr('data-old-title');
             $input.remove();
             $header.removeClass('title-editing');
+            console.log(oldTitle, $input.val());
+            _triggerEvent('titleChange', [me, oldTitle, $input.val()]);
             return me;
         };
 
@@ -529,8 +532,18 @@ $(function () {
                         ev.stopPropagation()
                     })
                     .click(function () {
+                        var classes = me.$el[0].className.split(' ');
+                        var oldClass = null;
+                        for (var i = 0; i < classes.length; i++){
+                            if (me.$globalOptions.listStyles.indexOf(classes[i]) > -1){
+                                oldClass = classes[i];
+                            }
+                        }
                         me.$el.removeClass(me.$globalOptions.listStyles.join(" "))
                             .addClass(this.className);
+
+                        _triggerEvent('styleChange', [me, oldClass, this.className]);
+
                     })
                     .appendTo($menu);
             }
@@ -735,7 +748,7 @@ $(function () {
 
         function _triggerEvent(type, data) {
             if (me.$options[type] && typeof me.$options[type] === 'function') {
-                return me.$options[type].call(me, data);
+                return me.$options[type].apply(me, data);
             } else {
                 return me.$el.trigger(type, data);
             }
@@ -1110,6 +1123,24 @@ $(function () {
          * @param {Object} The jquery ajax parameters object. You can add additional headers or parameters
          * to this object and must return the object which will be used for sending request
          */
-        beforeAjaxSent: null
+        beforeAjaxSent: null,
+
+        /**
+         * @event styleChange
+         * Fires when list style is changed
+         * @param {List} The <code>List</code> instance
+         * @param {String} Old class name
+         * @param {String} New class name
+         */
+        styleChange: null,
+
+        /**
+         * @event titleChange
+         * Fires when list title is change
+         * @param {List} The <code>List</code> instance
+         * @param {String} Old title name
+         * @param {String} New title name
+         */
+        titleChange: null
     };
 });
