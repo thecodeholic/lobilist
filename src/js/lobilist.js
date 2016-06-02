@@ -126,6 +126,9 @@ $(function () {
          * @returns {List}
          */
         this.deleteItem = function (item, errorCallback) {
+            if (_triggerEvent('beforeItemDelete', [me, item]) === false) {
+                return me
+            }
             if (me.$globalOptions.actions.delete) {
                 return _sendAjax(me.$globalOptions.actions.delete, {
                     data: item,
