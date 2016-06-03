@@ -124,6 +124,7 @@ $(function () {
                         });
                     },
                     afterItemAdd: function () {
+                        console.log(arguments);
                         Lobibox.notify('default', {
                             msg: 'afterItemAdd'
                         });
