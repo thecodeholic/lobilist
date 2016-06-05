@@ -8,6 +8,7 @@
  */
 $(function () {
 
+    var LIST_COUNTER = 0;
     /**
      * List class
      *
@@ -49,7 +50,7 @@ $(function () {
 			var me = this;
             me.suppressEvents();
             if (!me.$options.id) {
-                me.$options.id = me._randomString(10);
+                me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
             }
             var $wrapper = $('<div class="lobilist-wrapper"></div>');
             var $div = $('<div id="'+me.$options.id+'" class="lobilist"></div>').appendTo($wrapper);
@@ -320,23 +321,6 @@ $(function () {
         resumeEvents: function(){
             this.eventsSuppressed = false;
             return this;
-        },
-
-        /**
-         * Generates random string of n length.
-         * String contains only letters and numbers
-         *
-         * @param {int} n - The length of the string
-         * @returns {String} Generated String
-         */
-        _randomString: function (n) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for (var i = 0; i < n; i++)
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-            return text;
         },
 
         _processItemData: function (item) {

@@ -50,7 +50,7 @@ $(function () {
 			var me = this;
             me.suppressEvents();
             if (!me.$options.id) {
-                me.$options.id = 'lobilist-list-' + LIST_COUNTER;
+                me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
             }
             var $wrapper = $('<div class="lobilist-wrapper"></div>');
             var $div = $('<div id="'+me.$options.id+'" class="lobilist"></div>').appendTo($wrapper);
