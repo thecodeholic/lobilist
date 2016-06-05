@@ -845,11 +845,13 @@ $(function () {
         init: function (options) {
             var me = this;
             me.suppressEvents();
+
+            me.$options = this._processInput(options);
             me.$el.addClass('lobilists');
             if (me.$options.onSingleLine) {
                 me.$el.addClass('single-line');
             }
-            me.$options = this._processInput(options);
+
             me._createLists();
             me._handleSortable();
             me._triggerEvent('init', [me]);
