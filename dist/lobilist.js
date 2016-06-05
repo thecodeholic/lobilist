@@ -20,6 +20,7 @@ $(function () {
         this.$lobiList = $lobiList;
         this.$options = options;
         this.$globalOptions = $lobiList.$options;
+        this.$items = {};
 
         this._init();
     };
@@ -29,7 +30,7 @@ $(function () {
         $el: null,
         $elWrapper: null,
         $options: {},
-        $items: [],
+        $items: {},
         $globalOptions: {},
         $ul: null,
         $header: null,
@@ -329,7 +330,6 @@ $(function () {
          * @returns {String} Generated String
          */
         _randomString: function (n) {
-			var me = this;
             var text = "";
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -526,15 +526,18 @@ $(function () {
             var $item = $('<input>', {
                 'type': 'checkbox'
             });
-            $item.change(me._onCheckboxChange);
+
+            $item.change(function(){
+                me._onCheckboxChange(this);
+            });
             return $('<label>', {
                 'class': 'checkbox-inline lobilist-check'
             }).append($item);
         },
 
-        _onCheckboxChange: function () {
+        _onCheckboxChange: function (checkbox) {
 			var me = this;
-            var $this = $(this);
+            var $this = $(checkbox);
             if ($this.prop('checked')) {
                 me._triggerEvent('afterMarkAsDone', [me, $this])
             } else {
@@ -726,7 +729,7 @@ $(function () {
             }
             $li.data('lobiListItem', item);
             me.$ul.append($li);
-            me.$items.push(item);
+            me.$items[item.id] = item;
             me._triggerEvent('afterItemAdd', [me, item]);
 
             return $li;
@@ -784,6 +787,7 @@ $(function () {
                 $li.append('<div class="lobilist-item-duedate">' + item.dueDate + '</div>');
             }
             $li.data('lobiListItem', item);
+            $.extend(me.$items[item.id], item);
             me._triggerEvent('afterItemUpdate', [me, item]);
         },
 

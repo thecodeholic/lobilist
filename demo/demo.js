@@ -135,6 +135,7 @@ $(function () {
                         });
                     },
                     afterItemUpdate: function () {
+                        console.log(arguments);
                         Lobibox.notify('default', {
                             msg: 'afterItemUpdate'
                         });
