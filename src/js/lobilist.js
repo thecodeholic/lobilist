@@ -246,7 +246,7 @@ $(function () {
             me.$title.html($input.val()).removeClass('hide').removeAttr('data-old-title');
             $input.remove();
             me.$header.removeClass('title-editing');
-            console.log(oldTitle, $input.val());
+            // console.log(oldTitle, $input.val());
             me._triggerEvent('titleChange', [me, oldTitle, $input.val()]);
             return me;
         },
@@ -604,7 +604,9 @@ $(function () {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-remove"></i>'
             });
-            $btn.click(me._onRemoveListClick);
+            $btn.click(function(){
+                me._onRemoveListClick();
+            });
             return $btn;
         },
 
