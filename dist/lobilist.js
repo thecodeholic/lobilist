@@ -39,6 +39,7 @@ $(function () {
         $form: null,
         $footer: null,
         $body: null,
+        $hasGeneratedId: false,
 
         eventsSuppressed: false,
 
@@ -51,10 +52,13 @@ $(function () {
             me.suppressEvents();
             if (!me.$options.id) {
                 me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
+                me.$hasGeneratedId = true;
             }
             var $wrapper = $('<div class="lobilist-wrapper"></div>');
             var $div = $('<div id="'+me.$options.id+'" class="lobilist"></div>').appendTo($wrapper);
-
+            if (!me.$hasGeneratedId){
+                $div.attr('data-db-id', me.$options.id);
+            }
             if (me.$options.defaultStyle) {
                 $div.addClass(me.$options.defaultStyle);
             }
@@ -325,6 +329,7 @@ $(function () {
 
         _processItemData: function (item) {
 			var me = this;
+            item.listId = me.$options.id;
             return $.extend({}, me.$globalOptions.itemOptions, item);
         },
 
