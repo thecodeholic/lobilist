@@ -430,6 +430,7 @@ $(function () {
             $ft.appendTo($form);
 
             me._formHandler($form);
+
             me.$el.append($form);
             return $form;
         },
@@ -525,11 +526,14 @@ $(function () {
 
         _onCheckboxChange: function (checkbox) {
 			var me = this;
-            var $this = $(checkbox);
-            if ($this.prop('checked')) {
-                me._triggerEvent('afterMarkAsDone', [me, $this])
+            var $this = $(checkbox),
+                $todo = $this.closest('.lobilist-item'),
+                item = $todo.data('lobiListItem');
+            item.done = $this.prop('checked');
+            if (item.done) {
+                me._triggerEvent('afterMarkAsDone', [me, item])
             } else {
-                me._triggerEvent('afterMarkAsUndone', [me, $this])
+                me._triggerEvent('afterMarkAsUndone', [me, item])
             }
 
             $this.closest('.lobilist-item').toggleClass('item-done');
