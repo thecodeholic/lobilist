@@ -430,7 +430,6 @@ $(function () {
             $ft.appendTo($form);
 
             me._formHandler($form);
-
             me.$el.append($form);
             return $form;
         },
@@ -685,8 +684,28 @@ $(function () {
                 forcePlaceholderSize: true,
                 opacity: 0.9,
                 revert: 70,
+                start: function(event, ui){
+                    var $todo = ui.item,
+                        $list = $todo.closest('.lobilist');
+                    $todo.data('oldIndex', $todo.index());
+                    $todo.data('oldList', $list.data('lobiList'));
+                },
                 update: function (event, ui) {
-                    me._triggerEvent('afterItemReorder', [me, ui.item]);
+                    var $todo = ui.item,
+                        item = $todo.data('lobiListItem'),
+                        oldList = $todo.data('oldList'),
+                        oldIndex = $todo.data('oldIndex'),
+                        currentIndex = $todo.index(),
+                        $itemWrapper = me.$el.find('.lobilist-items');
+
+                    var $children = $itemWrapper.children().filter(function() { return this == $todo[0]; });
+                    if ($children.length > 0) {
+                        if (me != oldList){
+                            delete oldList.$items[item.id];
+                            me.$items[item.id] = item;
+                        }
+                        me._triggerEvent('afterItemReorder', [me, oldList, currentIndex, oldIndex, item, $todo]);
+                    }
                 }
             });
         },
@@ -789,8 +808,6 @@ $(function () {
             }
             if (me.$options[type] && typeof me.$options[type] === 'function') {
                 return me.$options[type].apply(me, data);
-            } else {
-                return me.$el.trigger(type, data);
             }
         },
 
@@ -893,8 +910,16 @@ $(function () {
                     forcePlaceholderSize: true,
                     opacity: 0.9,
                     revert: 70,
+                    start: function(event, ui){
+                        var $wrapper = ui.item;
+                        $wrapper.attr('data-previndex', $wrapper.index());
+                    },
                     update: function (event, ui) {
-                        me._triggerEvent('afterListReorder', [me, ui.item.find('.lobilist').data('lobiList')]);
+                        var $wrapper = ui.item,
+                            $list = $wrapper.find('.lobilist'),
+                            currentIndex = $wrapper.index(),
+                            oldIndex = parseInt($wrapper.attr('data-previndex'));
+                        me._triggerEvent('afterListReorder', [me, $list.data('lobiList'), currentIndex, oldIndex]);
                     }
                 });
             } else {
