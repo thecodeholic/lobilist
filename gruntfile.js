@@ -88,7 +88,7 @@ module.exports = function(grunt){
             options: {
                 mangle: false
             },
-            my_target: {
+            main: {
                 files: [
                     {
                         expand: true,

@@ -310,6 +310,41 @@ $(function () {
         },
 
         /**
+         * Get position among siblings
+         *
+         * @returns {int}
+         */
+        getPosition: function(){
+            var me = this;
+            return me.$elWrapper.index();
+        },
+
+        /**
+         * Get id for list
+         *
+         * @returns {int}
+         */
+        getId: function(){
+            var me = this;
+
+            return me.$options.id;
+        },
+
+        /**
+         * Set the id of the list
+         *
+         * @param id
+         * @returns {List}
+         */
+        setId: function(id){
+            var me = this;
+            me.$el.attr('id', id);
+            me.$options.id = id;
+            me.$el.attr('data-db-id', me.$options.id);
+            return me;
+        },
+
+        /**
          * Suppress events. None of the events will be triggered until you call <code>resumeEvents</code>
          * @returns {List}
          */
@@ -880,7 +915,8 @@ $(function () {
             options = $.extend({}, $.fn.lobiList.DEFAULT_OPTIONS, options);
             if (options.actions.load) {
                 $.ajax(options.actions.load, {
-                    async: false
+                    async: false,
+                    data: {name: options.name}
                 }).done(function (res) {
                     options.lists = res.lists;
                 });
@@ -1057,6 +1093,8 @@ $(function () {
         });
     };
     $.fn.lobiList.DEFAULT_OPTIONS = {
+        // the name to identify board from others
+        name: null,
         // Available style for lists
         'listStyles': ['lobilist-default', 'lobilist-danger', 'lobilist-success', 'lobilist-warning', 'lobilist-info', 'lobilist-primary'],
         // Default options for all lists
