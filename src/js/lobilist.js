@@ -297,15 +297,20 @@ $(function () {
         editItem: function (id) {
 			var me = this;
             var $item = me.$lobiList.$el.find('li[data-id=' + id + ']');
-            var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form');
-            var $footer = $item.closest('.lobilist').find('.lobilist-footer');
+            var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form').removeClass('hide');
+            $item.closest('.lobilist').find('.lobilist-footer').addClass('hide');
 
-            $form.removeClass('hide');
-            $footer.addClass('hide');
-            $form[0].id.value = $item.attr('data-id');
-            $form[0].title.value = $item.find('.lobilist-item-title').html();
-            $form[0].description.value = $item.find('.lobilist-item-description').html() || '';
-            $form[0].dueDate.value = $item.find('.lobilist-item-duedate').html() || '';
+            var itemData = $item.data('lobiListItem');
+
+            for (var i in itemData){
+                if ($form[0][i]) {
+                    $form[0][i].value = itemData[i];
+                }
+            }
+            // $form[0].id.value = $item.attr('data-id');
+            // $form[0].title.value = $item.find('.lobilist-item-title').html();
+            // $form[0].description.value = $item.find('.lobilist-item-description').html() || '';
+            // $form[0].dueDate.value = $item.find('.lobilist-item-duedate').html() || '';
             return me;
         },
 
@@ -484,12 +489,12 @@ $(function () {
                 me._showFormError('title', 'Title can not be empty');
                 return;
             }
-            me.saveOrUpdateItem({
-                id: me.$form[0].id.value,
-                title: me.$form[0].title.value,
-                description:me. $form[0].description.value,
-                dueDate: me.$form[0].dueDate.value
+            var formData = {},
+                $inputs = me.$form.find('[name]');
+            $inputs.each(function(ind, el){
+                formData[el.name] = el.value;
             });
+            me.saveOrUpdateItem(formData);
             me.$form.addClass('hide');
             me.$footer.removeClass('hide');
         },
@@ -901,8 +906,8 @@ $(function () {
 
             me._createLists();
             me._handleSortable();
-            me._triggerEvent('init', [me]);
             me.resumeEvents();
+            me._triggerEvent('init', [me]);
         },
 
         /**
