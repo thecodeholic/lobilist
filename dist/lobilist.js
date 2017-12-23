@@ -12,31 +12,31 @@ $(function () {
 
     var StorageLocal = function () {
         var STORAGE_KEY = 'lobilist';
-        this.setListTitle = function(lobilistId, listId, title){
+        this.setListProperty = function (lobilistId, listId, property, value) {
             var storage = this.getStorage() || {};
             var lobilistStorage = storage[lobilistId] = storage[lobilistId] || {lists: {}};
             var listStorage = lobilistStorage.lists[listId] = lobilistStorage.lists[listId] || {};
-            listStorage.title = title;
+            listStorage[property] = value;
             this.setStorage(storage);
         };
 
-        this.getListTitle = function(lobilistId, listId){
+        this.getListProperty = function (lobilistId, listId, property) {
             var storage = this.getLobilistStorage(lobilistId);
             if (storage && storage.lists && storage.lists[listId]) {
-                return storage.lists[listId].title;
+                return storage.lists[listId][property];
             }
         };
 
-        this.getLobilistStorage = function(lobilistId){
+        this.getLobilistStorage = function (lobilistId) {
             var storage = this.getStorage() || {};
             return storage[lobilistId];
         };
 
-        this.getStorage = function(){
+        this.getStorage = function () {
             return JSON.parse(localStorage.getItem(STORAGE_KEY) || null);
         };
 
-        this.setStorage = function(data){
+        this.setStorage = function (data) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data || {}))
         };
     };
@@ -73,11 +73,11 @@ $(function () {
         $footer: null,
         $body: null,
         $hasGeneratedId: false,
-        storageObject : null,
+        storageObject: null,
 
         eventsSuppressed: false,
 
-        isStateful: function(){
+        isStateful: function () {
             return !!this.$el.attr('id');
         },
 
@@ -86,15 +86,15 @@ $(function () {
          * @private
          */
         _init: function () {
-			var me = this;
+            var me = this;
             me.suppressEvents();
             if (!me.$options.id) {
                 me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
                 me.$hasGeneratedId = true;
             }
             var $wrapper = $('<div class="lobilist-wrapper"></div>');
-            var $div = $('<div id="'+me.$options.id+'" class="lobilist"></div>').appendTo($wrapper);
-            if (!me.$hasGeneratedId){
+            var $div = $('<div id="' + me.$options.id + '" class="lobilist"></div>').appendTo($wrapper);
+            if (!me.$hasGeneratedId) {
                 $div.attr('data-db-id', me.$options.id);
             }
             if (me.$options.defaultStyle) {
@@ -103,8 +103,13 @@ $(function () {
             me.$el = $div;
             me.$elWrapper = $wrapper;
 
-            if (me.isStateful()){
-                me.$options.title = me.getSavedTitle() === undefined ? me.$options.title : me.getSavedTitle();
+            if (me.isStateful()) {
+
+                if (me.getSavedProperty('title') !== undefined){
+
+                }
+                 =  ? me.$options.title : me.getSavedProperty('title');
+                me.$options.title = me.getSavedProperty('style') === undefined ? me.$options.style : me.getSavedProperty('style');
             }
 
             me.$header = me._createHeader();
@@ -123,9 +128,14 @@ $(function () {
             me.resumeEvents();
         },
 
-        getSavedTitle: function(){
+        getSavedProperty: function (property) {
             var me = this;
-            return me.$lobiList.storageObject.getListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'));
+            return me.$lobiList.storageObject.getListProperty(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), property);
+        },
+
+        saveProperty: function (property, value) {
+            var me = this;
+            return me.$lobiList.storageObject.setListProperty(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), property, value);
         },
 
         /**
@@ -141,7 +151,7 @@ $(function () {
          * @returns {List}
          */
         addItem: function (item, errorCallback) {
-			var me = this;
+            var me = this;
             if (me._triggerEvent('beforeItemAdd', [me, item]) === false) {
                 return me;
             }
@@ -152,7 +162,7 @@ $(function () {
                     data: item,
                     method: 'POST'
                 })
-                    //res is JSON object of format {"success": Boolean, "id": Number, "msg": String}
+                //res is JSON object of format {"success": Boolean, "id": Number, "msg": String}
                     .done(function (res) {
                         if (res.success) {
                             item.id = res.id;
@@ -183,7 +193,7 @@ $(function () {
          * @returns {List}
          */
         updateItem: function (item, errorCallback) {
-			var me = this;
+            var me = this;
             if (me._triggerEvent('beforeItemUpdate', [me, item]) === false) {
                 return me
             }
@@ -192,7 +202,7 @@ $(function () {
                     data: item,
                     method: 'POST'
                 })
-                    //res is JSON object of format {"id": Number, "success": Boolean, "msg": String}
+                //res is JSON object of format {"id": Number, "success": Boolean, "msg": String}
                     .done(function (res) {
                         if (res.success) {
                             me._updateItemInList(item);
@@ -221,7 +231,7 @@ $(function () {
          * @returns {List}
          */
         deleteItem: function (item, errorCallback) {
-			var me = this;
+            var me = this;
             if (me._triggerEvent('beforeItemDelete', [me, item]) === false) {
                 return me
             }
@@ -230,7 +240,7 @@ $(function () {
                     data: item,
                     method: 'POST'
                 })
-                    //res is JSON object of format
+                //res is JSON object of format
                     .done(function (res) {
                         if (res.success) {
                             me._removeItemFromList(item);
@@ -257,7 +267,7 @@ $(function () {
          * @returns {List}
          */
         saveOrUpdateItem: function (item, errorCallback) {
-			var me = this;
+            var me = this;
             if (item.id) {
                 me.updateItem(item, errorCallback);
             } else {
@@ -273,7 +283,7 @@ $(function () {
          * @returns {List}
          */
         startTitleEditing: function () {
-			var me = this;
+            var me = this;
             var input = me._createInput();
             me.$title.attr('data-old-title', me.$title.html());
             input.val(me.$title.html());
@@ -292,12 +302,12 @@ $(function () {
          * @returns {List}
          */
         finishTitleEditing: function () {
-			var me = this;
+            var me = this;
             var $input = me.$header.find('input');
             var oldTitle = me.$title.attr('data-old-title');
             me.$title.html($input.val()).removeClass('hide').removeAttr('data-old-title');
-            if (me.isStateful()){
-                me.$lobiList.storageObject.setListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), $input.val());
+            if (me.isStateful()) {
+                me.saveProperty( 'title', $input.val());
             }
             $input.remove();
             me.$header.removeClass('title-editing');
@@ -313,7 +323,7 @@ $(function () {
          * @returns {List}
          */
         cancelTitleEditing: function () {
-			var me = this;
+            var me = this;
             var $input = me.$header.find('input');
             if ($input.length === 0) {
                 return me;
@@ -331,7 +341,7 @@ $(function () {
          * @returns {List} - Just removed <code>List</code> instance
          */
         remove: function () {
-			var me = this;
+            var me = this;
             me.$lobiList.$lists.splice(me.$el.index(), 1);
             me.$elWrapper.remove();
 
@@ -346,14 +356,14 @@ $(function () {
          * @returns {List}
          */
         editItem: function (id) {
-			var me = this;
+            var me = this;
             var $item = me.$lobiList.$el.find('li[data-id=' + id + ']');
             var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form').removeClass('hide');
             $item.closest('.lobilist').find('.lobilist-footer').addClass('hide');
 
             var itemData = $item.data('lobiListItem');
 
-            for (var i in itemData){
+            for (var i in itemData) {
                 if ($form[0][i]) {
                     $form[0][i].value = itemData[i];
                 }
@@ -370,7 +380,7 @@ $(function () {
          *
          * @returns {int}
          */
-        getPosition: function(){
+        getPosition: function () {
             var me = this;
             return me.$elWrapper.index();
         },
@@ -380,7 +390,7 @@ $(function () {
          *
          * @returns {int}
          */
-        getId: function(){
+        getId: function () {
             var me = this;
 
             return me.$options.id;
@@ -392,7 +402,7 @@ $(function () {
          * @param id
          * @returns {List}
          */
-        setId: function(id){
+        setId: function (id) {
             var me = this;
             me.$el.attr('id', id);
             me.$options.id = id;
@@ -404,7 +414,7 @@ $(function () {
          * Suppress events. None of the events will be triggered until you call <code>resumeEvents</code>
          * @returns {List}
          */
-        suppressEvents: function(){
+        suppressEvents: function () {
             this.eventsSuppressed = true;
             return this;
         },
@@ -413,19 +423,19 @@ $(function () {
          * Resume all events.
          * @returns {List}
          */
-        resumeEvents: function(){
+        resumeEvents: function () {
             this.eventsSuppressed = false;
             return this;
         },
 
         _processItemData: function (item) {
-			var me = this;
+            var me = this;
             item.listId = me.$options.id;
             return $.extend({}, me.$globalOptions.itemOptions, item);
         },
 
         _createHeader: function () {
-			var me = this;
+            var me = this;
             var $header = $('<div>', {
                 'class': 'lobilist-header'
             });
@@ -454,7 +464,7 @@ $(function () {
         },
 
         _createTitle: function () {
-			var me = this;
+            var me = this;
             var $title = $('<div>', {
                 'class': 'lobilist-title',
                 html: me.$options.title
@@ -468,7 +478,7 @@ $(function () {
         },
 
         _createBody: function () {
-			var me = this;
+            var me = this;
             return $('<div>', {
                 'class': 'lobilist-body'
             }).appendTo(me.$el);
@@ -476,7 +486,7 @@ $(function () {
         },
 
         _createForm: function () {
-			var me = this;
+            var me = this;
             var $form = $('<form>', {
                 'class': 'lobilist-add-todo-form hide'
             });
@@ -527,7 +537,7 @@ $(function () {
         },
 
         _formHandler: function ($form) {
-			var me = this;
+            var me = this;
             $form.on('submit', function (ev) {
                 ev.preventDefault();
                 me._submitForm();
@@ -535,14 +545,14 @@ $(function () {
         },
 
         _submitForm: function () {
-			var me = this;
+            var me = this;
             if (!me.$form[0].title.value) {
                 me._showFormError('title', 'Title can not be empty');
                 return;
             }
             var formData = {},
                 $inputs = me.$form.find('[name]');
-            $inputs.each(function(ind, el){
+            $inputs.each(function (ind, el) {
                 formData[el.name] = el.value;
             });
             me.saveOrUpdateItem(formData);
@@ -551,7 +561,7 @@ $(function () {
         },
 
         _createFooter: function () {
-			var me = this;
+            var me = this;
             var $footer = $('<div>', {
                 'class': 'lobilist-footer'
             });
@@ -569,7 +579,7 @@ $(function () {
         },
 
         _createList: function () {
-			var me = this;
+            var me = this;
             var $list = $('<ul>', {
                 'class': 'lobilist-items'
             });
@@ -578,7 +588,7 @@ $(function () {
         },
 
         _createItems: function (items) {
-			var me = this;
+            var me = this;
             for (var i = 0; i < items.length; i++) {
                 me._addItem(items[i]);
             }
@@ -591,7 +601,7 @@ $(function () {
          * @type Object
          */
         _addItem: function (item) {
-			var me = this;
+            var me = this;
             if (!item.id) {
                 item.id = me.$lobiList.getNextId();
             }
@@ -602,12 +612,12 @@ $(function () {
         },
 
         _createCheckbox: function () {
-			var me = this;
+            var me = this;
             var $item = $('<input>', {
                 'type': 'checkbox'
             });
 
-            $item.change(function(){
+            $item.change(function () {
                 me._onCheckboxChange(this);
             });
             return $('<label>', {
@@ -616,7 +626,7 @@ $(function () {
         },
 
         _onCheckboxChange: function (checkbox) {
-			var me = this;
+            var me = this;
             var $this = $(checkbox),
                 $todo = $this.closest('.lobilist-item'),
                 item = $todo.data('lobiListItem');
@@ -631,7 +641,7 @@ $(function () {
         },
 
         _createDropdownForStyleChange: function () {
-			var me = this;
+            var me = this;
             var $dropdown = $('<div>', {
                 'class': 'dropdown'
             }).append(
@@ -663,6 +673,8 @@ $(function () {
                         me.$el.removeClass(me.$globalOptions.listStyles.join(" "))
                             .addClass(this.className);
 
+                        me.saveProperty('style', this.className);
+
                         me._triggerEvent('styleChange', [me, oldClass, this.className]);
 
                     })
@@ -672,7 +684,7 @@ $(function () {
         },
 
         _createEditTitleButton: function () {
-			var me = this;
+            var me = this;
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-edit"></i>'
@@ -685,7 +697,7 @@ $(function () {
         },
 
         _createAddNewButton: function () {
-			var me = this;
+            var me = this;
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-plus"></i>'
@@ -698,19 +710,19 @@ $(function () {
         },
 
         _createCloseButton: function () {
-			var me = this;
+            var me = this;
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs',
                 html: '<i class="glyphicon glyphicon-remove"></i>'
             });
-            $btn.click(function(){
+            $btn.click(function () {
                 me._onRemoveListClick();
             });
             return $btn;
         },
 
         _onRemoveListClick: function () {
-			var me = this;
+            var me = this;
             me._triggerEvent('beforeListRemove', [me]);
             me.remove();
             me._triggerEvent('afterListRemove', [me]);
@@ -718,7 +730,7 @@ $(function () {
         },
 
         _createFinishTitleEditing: function () {
-			var me = this;
+            var me = this;
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs btn-finish-title-editing',
                 html: '<i class="glyphicon glyphicon-ok-circle"></i>'
@@ -730,7 +742,7 @@ $(function () {
         },
 
         _createCancelTitleEditing: function () {
-			var me = this;
+            var me = this;
             var $btn = $('<button>', {
                 'class': 'btn btn-default btn-xs btn-cancel-title-editing',
                 html: '<i class="glyphicon glyphicon-remove-circle"></i>'
@@ -742,7 +754,7 @@ $(function () {
         },
 
         _createInput: function () {
-			var me = this;
+            var me = this;
             var input = $('<input type="text" class="form-control">');
             input.on('keyup', function (ev) {
                 if (ev.which === 13) {
@@ -757,19 +769,19 @@ $(function () {
                 .addClass('has-error');
             $fGroup.find('.help-block').remove();
             $fGroup.append(
-                $('<span class="help-block">'+error+'</span>')
+                $('<span class="help-block">' + error + '</span>')
             );
         },
 
         _resetForm: function () {
-			var me = this;
+            var me = this;
             me.$form[0].reset();
             me.$form[0].id.value = "";
             me.$form.find('.form-group').removeClass('has-error').find('.help-block').remove();
         },
 
         _enableSorting: function () {
-			var me = this;
+            var me = this;
             me.$el.find('.lobilist-items').sortable({
                 connectWith: '.lobilist .lobilist-items',
                 items: '.lobilist-item',
@@ -779,7 +791,7 @@ $(function () {
                 forcePlaceholderSize: true,
                 opacity: 0.9,
                 revert: 70,
-                start: function(event, ui){
+                start: function (event, ui) {
                     var $todo = ui.item,
                         $list = $todo.closest('.lobilist');
                     $todo.data('oldIndex', $todo.index());
@@ -793,9 +805,11 @@ $(function () {
                         currentIndex = $todo.index(),
                         $itemWrapper = me.$el.find('.lobilist-items');
 
-                    var $children = $itemWrapper.children().filter(function() { return this == $todo[0]; });
+                    var $children = $itemWrapper.children().filter(function () {
+                        return this == $todo[0];
+                    });
                     if ($children.length > 0) {
-                        if (me != oldList){
+                        if (me != oldList) {
                             delete oldList.$items[item.id];
                             me.$items[item.id] = item;
                         }
@@ -806,7 +820,7 @@ $(function () {
         },
 
         _addItemToList: function (item) {
-			var me = this;
+            var me = this;
             var $li = $('<li>', {
                 'data-id': item.id,
                 'class': 'lobilist-item'
@@ -841,7 +855,7 @@ $(function () {
         },
 
         _addItemControls: function ($li) {
-			var me = this;
+            var me = this;
             if (me.$options.useCheckboxes) {
                 $li.append(me._createCheckbox());
             }
@@ -878,7 +892,7 @@ $(function () {
         },
 
         _updateItemInList: function (item) {
-			var me = this;
+            var me = this;
             var $li = me.$lobiList.$el.find('li[data-id="' + item.id + '"]');
             $li.find('input[type=checkbox]').prop('checked', item.done);
             $li.find('.lobilist-item-title').html(item.title);
@@ -897,8 +911,8 @@ $(function () {
         },
 
         _triggerEvent: function (type, data) {
-			var me = this;
-            if (me.eventsSuppressed){
+            var me = this;
+            if (me.eventsSuppressed) {
                 return;
             }
             if (me.$options[type] && typeof me.$options[type] === 'function') {
@@ -907,18 +921,18 @@ $(function () {
         },
 
         _removeItemFromList: function (item) {
-			var me = this;
+            var me = this;
             me.$lobiList.$el.find('li[data-id=' + item.id + ']').remove();
             me._triggerEvent('afterItemDelete', [me, item]);
         },
 
         _sendAjax: function (url, params) {
-			var me = this;
+            var me = this;
             return $.ajax(url, me._beforeAjaxSent(params))
         },
 
         _beforeAjaxSent: function (params) {
-			var me = this;
+            var me = this;
             var eventParams = me._triggerEvent('beforeAjaxSent', [me, params]);
             return $.extend({}, params, eventParams || {});
         }
@@ -979,14 +993,14 @@ $(function () {
             }
 
 
-            if (this.isStateful() && !options.storageObject){
+            if (this.isStateful() && !options.storageObject) {
                 this.storageObject = new StorageLocal();
             }
 
             return options;
         },
 
-        isStateful: function(){
+        isStateful: function () {
             return !!this.$el.data('inner-id');
         },
 
@@ -1016,7 +1030,7 @@ $(function () {
                     forcePlaceholderSize: true,
                     opacity: 0.9,
                     revert: 70,
-                    start: function(event, ui){
+                    start: function (event, ui) {
                         var $wrapper = ui.item;
                         $wrapper.attr('data-previndex', $wrapper.index());
                     },
@@ -1112,12 +1126,12 @@ $(function () {
             return listOptions;
         },
 
-        suppressEvents: function(){
+        suppressEvents: function () {
             this.eventsSuppressed = true;
             return this;
         },
 
-        resumeEvents: function(){
+        resumeEvents: function () {
             this.eventsSuppressed = false;
             return this;
         },
@@ -1130,7 +1144,7 @@ $(function () {
          */
         _triggerEvent: function (type, data) {
             var me = this;
-            if (me.eventsSuppressed){
+            if (me.eventsSuppressed) {
                 return;
             }
             if (me.$options[type] && typeof me.$options[type] === 'function') {
