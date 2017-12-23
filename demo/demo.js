@@ -12,6 +12,7 @@ $(function () {
     $('#todo-lists-basic-demo').lobiList({
         lists: [
             {
+                id: 'todo',
                 title: 'TODO',
                 defaultStyle: 'lobilist-info',
                 items: [

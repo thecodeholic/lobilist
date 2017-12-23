@@ -9,6 +9,39 @@
 $(function () {
 
     var LIST_COUNTER = 0;
+
+    var StorageLocal = function () {
+        var STORAGE_KEY = 'lobilist';
+        this.setListTitle = function(lobilistId, listId, title){
+            var storage = this.getStorage() || {};
+            var lobilistStorage = storage[lobilistId] = storage[lobilistId] || {lists: {}};
+            var listStorage = lobilistStorage.lists[listId] = lobilistStorage.lists[listId] || {};
+            listStorage.title = title;
+            this.setStorage(storage);
+        };
+
+        this.getListTitle = function(lobilistId, listId){
+            var storage = this.getLobilistStorage(lobilistId);
+            if (storage && storage.lists && storage.lists[listId]) {
+                return storage.lists[listId].title;
+            }
+        };
+
+        this.getLobilistStorage = function(lobilistId){
+            var storage = this.getStorage() || {};
+            return storage[lobilistId];
+        };
+
+        this.getStorage = function(){
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || null);
+        };
+
+        this.setStorage = function(data){
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data || {}))
+        };
+    };
+
+
     /**
      * List class
      *
@@ -40,8 +73,13 @@ $(function () {
         $footer: null,
         $body: null,
         $hasGeneratedId: false,
+        storageObject : null,
 
         eventsSuppressed: false,
+
+        isStateful: function(){
+            return !!this.$el.attr('id');
+        },
 
         /**
          *
@@ -64,6 +102,11 @@ $(function () {
             }
             me.$el = $div;
             me.$elWrapper = $wrapper;
+
+            if (me.isStateful()){
+                me.$options.title = me.getSavedTitle() === undefined ? me.$options.title : me.getSavedTitle();
+            }
+
             me.$header = me._createHeader();
             me.$title = me._createTitle();
             me.$body = me._createBody();
@@ -78,6 +121,11 @@ $(function () {
                 me._enableSorting();
             }
             me.resumeEvents();
+        },
+
+        getSavedTitle: function(){
+            var me = this;
+            return me.$lobiList.storageObject.getListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'));
         },
 
         /**
@@ -248,6 +296,9 @@ $(function () {
             var $input = me.$header.find('input');
             var oldTitle = me.$title.attr('data-old-title');
             me.$title.html($input.val()).removeClass('hide').removeAttr('data-old-title');
+            if (me.isStateful()){
+                me.$lobiList.storageObject.setListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), $input.val());
+            }
             $input.remove();
             me.$header.removeClass('title-editing');
             // console.log(oldTitle, $input.val());
@@ -297,15 +348,20 @@ $(function () {
         editItem: function (id) {
 			var me = this;
             var $item = me.$lobiList.$el.find('li[data-id=' + id + ']');
-            var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form');
-            var $footer = $item.closest('.lobilist').find('.lobilist-footer');
+            var $form = $item.closest('.lobilist').find('.lobilist-add-todo-form').removeClass('hide');
+            $item.closest('.lobilist').find('.lobilist-footer').addClass('hide');
 
-            $form.removeClass('hide');
-            $footer.addClass('hide');
-            $form[0].id.value = $item.attr('data-id');
-            $form[0].title.value = $item.find('.lobilist-item-title').html();
-            $form[0].description.value = $item.find('.lobilist-item-description').html() || '';
-            $form[0].dueDate.value = $item.find('.lobilist-item-duedate').html() || '';
+            var itemData = $item.data('lobiListItem');
+
+            for (var i in itemData){
+                if ($form[0][i]) {
+                    $form[0][i].value = itemData[i];
+                }
+            }
+            // $form[0].id.value = $item.attr('data-id');
+            // $form[0].title.value = $item.find('.lobilist-item-title').html();
+            // $form[0].description.value = $item.find('.lobilist-item-description').html() || '';
+            // $form[0].dueDate.value = $item.find('.lobilist-item-duedate').html() || '';
             return me;
         },
 
@@ -484,12 +540,12 @@ $(function () {
                 me._showFormError('title', 'Title can not be empty');
                 return;
             }
-            me.saveOrUpdateItem({
-                id: me.$form[0].id.value,
-                title: me.$form[0].title.value,
-                description:me. $form[0].description.value,
-                dueDate: me.$form[0].dueDate.value
+            var formData = {},
+                $inputs = me.$form.find('[name]');
+            $inputs.each(function(ind, el){
+                formData[el.name] = el.value;
             });
+            me.saveOrUpdateItem(formData);
             me.$form.addClass('hide');
             me.$footer.removeClass('hide');
         },
@@ -901,8 +957,8 @@ $(function () {
 
             me._createLists();
             me._handleSortable();
-            me._triggerEvent('init', [me]);
             me.resumeEvents();
+            me._triggerEvent('init', [me]);
         },
 
         /**
@@ -921,7 +977,17 @@ $(function () {
                     options.lists = res.lists;
                 });
             }
+
+
+            if (this.isStateful() && !options.storageObject){
+                this.storageObject = new StorageLocal();
+            }
+
             return options;
+        },
+
+        isStateful: function(){
+            return !!this.$el.data('inner-id');
         },
 
         /**
@@ -1120,6 +1186,11 @@ $(function () {
             'insert': '',
             'delete': ''
         },
+
+        storage: null,
+
+        storageObject: null,
+
         // Whether to show checkboxes or not
         useCheckboxes: true,
         // Show/hide todo remove button

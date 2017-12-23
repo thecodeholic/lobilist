@@ -9,6 +9,39 @@
 $(function () {
 
     var LIST_COUNTER = 0;
+
+    var StorageLocal = function () {
+        var STORAGE_KEY = 'lobilist';
+        this.setListTitle = function(lobilistId, listId, title){
+            var storage = this.getStorage() || {};
+            var lobilistStorage = storage[lobilistId] = storage[lobilistId] || {lists: {}};
+            var listStorage = lobilistStorage.lists[listId] = lobilistStorage.lists[listId] || {};
+            listStorage.title = title;
+            this.setStorage(storage);
+        };
+
+        this.getListTitle = function(lobilistId, listId){
+            var storage = this.getLobilistStorage(lobilistId);
+            if (storage && storage.lists && storage.lists[listId]) {
+                return storage.lists[listId].title;
+            }
+        };
+
+        this.getLobilistStorage = function(lobilistId){
+            var storage = this.getStorage() || {};
+            return storage[lobilistId];
+        };
+
+        this.getStorage = function(){
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || null);
+        };
+
+        this.setStorage = function(data){
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data || {}))
+        };
+    };
+
+
     /**
      * List class
      *
@@ -40,8 +73,13 @@ $(function () {
         $footer: null,
         $body: null,
         $hasGeneratedId: false,
+        storageObject : null,
 
         eventsSuppressed: false,
+
+        isStateful: function(){
+            return !!this.$el.attr('id');
+        },
 
         /**
          *
@@ -64,6 +102,11 @@ $(function () {
             }
             me.$el = $div;
             me.$elWrapper = $wrapper;
+
+            if (me.isStateful()){
+                me.$options.title = me.getSavedTitle() === undefined ? me.$options.title : me.getSavedTitle();
+            }
+
             me.$header = me._createHeader();
             me.$title = me._createTitle();
             me.$body = me._createBody();
@@ -78,6 +121,11 @@ $(function () {
                 me._enableSorting();
             }
             me.resumeEvents();
+        },
+
+        getSavedTitle: function(){
+            var me = this;
+            return me.$lobiList.storageObject.getListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'));
         },
 
         /**
@@ -248,6 +296,9 @@ $(function () {
             var $input = me.$header.find('input');
             var oldTitle = me.$title.attr('data-old-title');
             me.$title.html($input.val()).removeClass('hide').removeAttr('data-old-title');
+            if (me.isStateful()){
+                me.$lobiList.storageObject.setListTitle(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), $input.val());
+            }
             $input.remove();
             me.$header.removeClass('title-editing');
             // console.log(oldTitle, $input.val());
@@ -926,7 +977,17 @@ $(function () {
                     options.lists = res.lists;
                 });
             }
+
+
+            if (this.isStateful() && !options.storageObject){
+                this.storageObject = new StorageLocal();
+            }
+
             return options;
+        },
+
+        isStateful: function(){
+            return !!this.$el.data('inner-id');
         },
 
         /**
@@ -1125,6 +1186,11 @@ $(function () {
             'insert': '',
             'delete': ''
         },
+
+        storage: null,
+
+        storageObject: null,
+
         // Whether to show checkboxes or not
         useCheckboxes: true,
         // Show/hide todo remove button

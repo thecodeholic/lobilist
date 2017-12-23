@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lobilist - jQuery plugin for todo lists. Supports drag & drop issues. Multiple lists with different colors.
+        Support for communication to backend</title>
+
+    <!--Default installation-->
+    <link rel="stylesheet" href="../lib/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../src/css/lobilist.css">
+
+    <!--Installation using bower. Preferred!!! -->
+    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>-->
+    <!--<link rel="stylesheet" href="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css"/>-->
+    <!--<link rel="stylesheet" href="bower_components/lobilist/dist/lobilist.min.css"/>-->
+
+</head>
+<body>
+
+<div class="container">
+    <div id="lobilist">
+        <!--Examples-->
+        <div id="lobilist-examples">
+            <h1>Examples</h1>
+            <hr>
+            <!--Basic example-->
+            <div>
+                <div class="bs-example">
+                    <h4>Basic example</h4>
+                    <div id="todo-lists-basic-demo" data-inner-id="todo-lists-basic-demo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Default installation-->
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/jquery/jquery-ui.min.js"></script>
+<script src="../lib/jquery/jquery.ui.touch-punch-improved.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../src/js/lobilist.js"></script>
+
+<!--Installation using bower. Preferred!!! -->
+<!--<script src="bower_components/jquery/dist/jquery.min.js"></script>-->
+<!--<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
+<!--<script src="bower_components/jquery-ui-touch-punch-improved/jquery.ui.touch-punch-improved.js"></script>-->
+<!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+<!--<script src="bower_components/lobilist/dist/lobilist.min.js"></script>-->
+
+<script src="../lib/lobibox/js/lobibox.min.js"></script>
+<script>
+    $(function () {
+        $('#todo-lists-basic-demo').lobiList({
+            lists: [
+                {
+                    id: 'todo',
+                    title: 'TODO',
+                    defaultStyle: 'lobilist-info',
+                    items: [
+                        {
+                            title: 'Floor cool cinders',
+                            description: 'Thunder fulfilled travellers folly, wading, lake.',
+                            dueDate: '2015-01-31'
+                        },
+                        {
+                            title: 'Periods pride',
+                            description: 'Accepted was mollis',
+                            done: true
+                        },
+                        {
+                            title: 'Flags better burns pigeon',
+                            description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.'
+                        },
+                        {
+                            title: 'Accepted was mollis',
+                            description: 'Rowed cloven frolic thereby, vivamus pining gown intruding strangers prank treacherously darkling.',
+                            dueDate: '2015-02-02'
+                        }
+                    ]
+                },
+                {
+                    id: 'doing',
+                    title: 'DOING',
+                    items: [
+                        {
+                            title: 'Composed trays',
+                            description: 'Hoary rattle exulting suspendisse elit paradises craft wistful. Bayonets allures prefer traits wrongs flushed. Tent wily matched bold polite slab coinage celerities gales beams.'
+                        },
+                        {
+                            title: 'Chic leafy'
+                        },
+                        {
+                            title: 'Guessed interdum armies chirp writhes most',
+                            description: 'Came champlain live leopards twilight whenever warm read wish squirrel rock.',
+                            dueDate: '2015-02-04',
+                            done: true
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+</script>
+</body>
+</html>
