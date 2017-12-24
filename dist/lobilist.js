@@ -12,12 +12,47 @@ $(function () {
 
     var StorageLocal = function () {
         var STORAGE_KEY = 'lobilist';
+
+
+        this.addList = function(lobilistId, listTitle){
+            console.log("TODO addList");
+        };
+
+        this.removeList = function(lobilistId, listId){
+            console.log("TODO removeList");
+        };
+
+        this.addTodo = function(lobilistId, listId, itemData){
+            console.log("TODO addTodod");
+            var storage = this.getLobilistStorage(listId) || {};
+            storage.items = storage.items || [];
+            storage.items.push();
+        };
+
+        this.removeTodo = function(lobilistId, list, itemId){
+            console.log("TODO removeTodo");
+        };
+
+        this.saveItemPositions = function(lobilistId){
+            console.log("TODO saveItemPositions");
+        };
+
+        this.saveListPositions = function(){
+            console.log("TODO saveItemPositions");
+        };
+
+
+
         this.setListProperty = function (lobilistId, listId, property, value) {
-            var storage = this.getStorage() || {};
-            var lobilistStorage = storage[lobilistId] = storage[lobilistId] || {lists: {}};
-            var listStorage = lobilistStorage.lists[listId] = lobilistStorage.lists[listId] || {};
+            var listStorage = this.getListStorage(lobilistId, listId);
             listStorage[property] = value;
-            this.setStorage(storage);
+            return this.setListStorage(lobilistId, listId, listStorage);
+
+            // var lobilistStorage = this.getLobilistStorage() || {};
+            // lobilistStorage.lists = lobilistStorage.lists || [];
+            // var listStorage = lobilistStorage.lists[listId] = lobilistStorage.lists[listId] || {};
+            // listStorage[property] = value;
+            // this.setStorage(storage);
         };
 
         this.getListProperty = function (lobilistId, listId, property) {
@@ -29,7 +64,25 @@ $(function () {
 
         this.getLobilistStorage = function (lobilistId) {
             var storage = this.getStorage() || {};
-            return storage[lobilistId];
+            return storage[lobilistId] || {lists: {}};
+        };
+
+        this.setLobilistStorage = function (lobilistId, lobilistStorage) {
+            var storage = this.getStorage() || {};
+            storage[lobilistId] = lobilistStorage;
+            return this.setStorage(storage);
+        };
+
+        this.getListStorage = function (lobilistId, listId) {
+            var storage = this.getLobilistStorage(lobilistId);
+            return storage.lists[listId] || {};
+        };
+
+        this.setListStorage = function(lobilistId, listId, listStorage){
+            var lobilistStorage = this.getLobilistStorage(lobilistId);
+            lobilistStorage.lists = lobilistStorage.lists || [];
+            lobilistStorage.lists[listId] = listStorage;
+            return this.setLobilistStorage(lobilistId, lobilistStorage);
         };
 
         this.getStorage = function () {
@@ -78,7 +131,7 @@ $(function () {
         eventsSuppressed: false,
 
         isStateful: function () {
-            return !!this.$el.attr('id');
+            return !!this.$el.attr('id') && this.$lobiList.storageObject;
         },
 
         /**
@@ -92,26 +145,20 @@ $(function () {
                 me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
                 me.$hasGeneratedId = true;
             }
-            var $wrapper = $('<div class="lobilist-wrapper"></div>');
-            var $div = $('<div id="' + me.$options.id + '" class="lobilist"></div>').appendTo($wrapper);
+            me.$elWrapper = $('<div class="lobilist-wrapper"></div>');
+            me.$el = $('<div id="' + me.$options.id + '" class="lobilist"></div>').appendTo(me.$elWrapper);
+
             if (!me.$hasGeneratedId) {
-                $div.attr('data-db-id', me.$options.id);
+                me.$el.attr('data-db-id', me.$options.id);
             }
-            if (me.$options.defaultStyle) {
-                $div.addClass(me.$options.defaultStyle);
-            }
-            me.$el = $div;
-            me.$elWrapper = $wrapper;
-
             if (me.isStateful()) {
-
-                if (me.getSavedProperty('title') !== undefined){
-
-                }
-                 =  ? me.$options.title : me.getSavedProperty('title');
-                me.$options.title = me.getSavedProperty('style') === undefined ? me.$options.style : me.getSavedProperty('style');
+                me.$options.title = me.getSavedProperty('title') === undefined ? me.$options.title : me.getSavedProperty('title');
+                me.$options.defaultStyle = me.getSavedProperty('style') === undefined ? me.$options.defaultStyle : me.getSavedProperty('style');
             }
 
+            if (me.$options.defaultStyle) {
+                me.$el.addClass(me.$options.defaultStyle);
+            }
             me.$header = me._createHeader();
             me.$title = me._createTitle();
             me.$body = me._createBody();
@@ -130,12 +177,12 @@ $(function () {
 
         getSavedProperty: function (property) {
             var me = this;
-            return me.$lobiList.storageObject.getListProperty(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), property);
+            return me.$lobiList.storageObject.getListProperty(me.$lobiList.getId(), me.getId(), property);
         },
 
         saveProperty: function (property, value) {
             var me = this;
-            return me.$lobiList.storageObject.setListProperty(me.$lobiList.$el.data('inner-id'), me.$el.attr('id'), property, value);
+            return me.$lobiList.storageObject.setListProperty(me.$lobiList.getId(), me.getId(), property, value);
         },
 
         /**
@@ -849,6 +896,7 @@ $(function () {
             $li.data('lobiListItem', item);
             me.$ul.append($li);
             me.$items[item.id] = item;
+            me.$lobiList.storageObject.addTodo(me.$lobiList.getId(), me.getId());
             me._triggerEvent('afterItemAdd', [me, item]);
 
             return $li;
@@ -976,6 +1024,16 @@ $(function () {
         },
 
         /**
+         * Get id for list
+         *
+         * @returns {int}
+         */
+        getId: function () {
+            var me = this;
+            return me.$el.data('stateful-id');
+        },
+
+        /**
          *
          * @param options
          * @returns {*}
@@ -1001,7 +1059,7 @@ $(function () {
         },
 
         isStateful: function () {
-            return !!this.$el.data('inner-id');
+            return !!this.getId();
         },
 
         /**
