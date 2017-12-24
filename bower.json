@@ -2,8 +2,8 @@
   "name": "lobilist",
   "description": "jQuery plugin for todo lists. Supports drag & drop issues. Multiple lists with different colors. Support for communication to backend",
   "main": [
-    "dist/lobilist.min.css",
-    "dist/lobilist.min.js"
+    "dist/lobilist.css",
+    "dist/lobilist.js"
   ],
   "authors": [
     {
