@@ -1024,7 +1024,6 @@ $(function () {
         $el: null,
         $lists: [],
         $options: {},
-        _nextId: 1,
 
         eventsSuppressed: false,
 
@@ -1184,13 +1183,15 @@ $(function () {
          * @returns {Number}
          */
         getNextId: function () {
-            var $items = this.find('.lobilist-item');
+            var $items = this.$el.find('.lobilist-item');
             var maxId = 0;
             $items.each(function(index, item){
                 var $item = $(item);
-                if ($item.)
-            })
-            return this._nextId++;
+                if (parseInt($item.attr('data-id')) > maxId){
+                    maxId = parseInt($item.attr('data-id'));
+                }
+            });
+            return maxId + 1;
         },
 
         /**
