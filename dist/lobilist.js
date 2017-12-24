@@ -697,19 +697,29 @@ $(function () {
 
         _createDropdownForStyleChange: function () {
             var me = this;
-            var $dropdown = $('<div>', {
+
+            var buttonOptions = {
+                'type': 'button',
+                'data-toggle': 'dropdown',
+                'class': 'btn btn-default btn-xs',
+                'html': '<i class="glyphicon glyphicon-th"></i>'
+            };
+            var dropdownOptions = {
                 'class': 'dropdown'
-            }).append(
-                $('<button>', {
-                    'type': 'button',
-                    'data-toggle': 'dropdown',
-                    'class': 'btn btn-default btn-xs',
-                    'html': '<i class="glyphicon glyphicon-th"></i>'
-                })
-            );
-            var $menu = $('<div>', {
+            };
+            var menuOptions = {
                 'class': 'dropdown-menu dropdown-menu-right'
-            }).appendTo($dropdown);
+            };
+            if (me.$options.forAngularJs){
+                buttonOptions['uib-dropdown-toggle'] = '';
+                dropdownOptions['uib-dropdown'] = '';
+                menuOptions['uib-dropdown-menu'] = '';
+            }
+
+            var $dropdown = $('<div>', dropdownOptions).append(
+                $('<button>', buttonOptions)
+            );
+            var $menu = $('<div>', menuOptions).appendTo($dropdown);
 
             for (var i = 0; i < me.$globalOptions.listStyles.length; i++) {
                 var st = me.$globalOptions.listStyles[i];
@@ -1288,6 +1298,8 @@ $(function () {
         defaultStyle: 'lobilist-default',
         // Whether to show lists on single line or not
         onSingleLine: true,
+        // This is used to generate angularJs directives instead of bootstrap plain html
+        forAngularJs: false,
 
         // Events
         /**
