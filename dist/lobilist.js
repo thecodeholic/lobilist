@@ -177,11 +177,19 @@ $(function () {
 
         getSavedProperty: function (property) {
             var me = this;
+            if (!me.isStateful()){
+                console.error("object is not stateful");
+                return false;
+            }
             return me.$lobiList.storageObject.getListProperty(me.$lobiList.getId(), me.getId(), property);
         },
 
         saveProperty: function (property, value) {
             var me = this;
+            if (!me.isStateful()){
+                console.error("object is not stateful");
+                return false;
+            }
             return me.$lobiList.storageObject.setListProperty(me.$lobiList.getId(), me.getId(), property, value);
         },
 
@@ -896,7 +904,10 @@ $(function () {
             $li.data('lobiListItem', item);
             me.$ul.append($li);
             me.$items[item.id] = item;
-            me.$lobiList.storageObject.addTodo(me.$lobiList.getId(), me.getId());
+
+            if (me.isStateful()) {
+                me.$lobiList.storageObject.addTodo(me.$lobiList.getId(), me.getId());
+            }
             me._triggerEvent('afterItemAdd', [me, item]);
 
             return $li;
