@@ -1184,6 +1184,12 @@ $(function () {
          * @returns {Number}
          */
         getNextId: function () {
+            var $items = this.find('.lobilist-item');
+            var maxId = 0;
+            $items.each(function(index, item){
+                var $item = $(item);
+                if ($item.)
+            })
             return this._nextId++;
         },
 

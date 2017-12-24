@@ -300,13 +300,13 @@
 .lobilists .lobilist-actions .dropdown-menu .lobilist-primary:hover {
   background-color: #2e6da4;
 }
-.lobilists .lobilist-actions .btn {
+.lobilists .lobilist-actions .btn.btn-default {
   background-color: transparent;
   border-color: transparent;
   width: 26px;
   height: 26px;
 }
-.lobilists .lobilist-actions .btn:hover {
+.lobilists .lobilist-actions .btn.btn-default:hover {
   background-color: rgba(0, 0, 0, 0.04);
 }
 .lobilists .lobilist-title {
