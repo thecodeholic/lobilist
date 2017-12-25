@@ -1053,6 +1053,16 @@ $(function () {
             return me.$el.data('stateful-id');
         },
 
+        getItemPositions: function(){
+            var positions = {};
+            var $items = this.$el.find('.lobilist-item');
+            $items.each(function(ind, item){
+                var $item = $(item);
+                positions[$item.attr('data-id')] = $item.index() + 1;
+            });
+            return positions;
+        },
+
         /**
          *
          * @param options
