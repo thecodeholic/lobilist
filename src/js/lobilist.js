@@ -482,7 +482,7 @@ $(function () {
         getStyle: function(){
             var classList = this.$el[0].className.split(/\s+/);
             for (var i = 0; i < classList.length; i++) {
-                if (this.$options.listStyles.indexOf(classList[i])) {
+                if (this.$options.listStyles.indexOf(classList[i]) > -1) {
                     return classList[i];
                 }
             }
