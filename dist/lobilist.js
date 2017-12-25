@@ -479,6 +479,16 @@ $(function () {
             return this.$title.html();
         },
 
+        getStyle: function(){
+            var classList = this.$el[0].className.split(/\s+/);
+            for (var i = 0; i < classList.length; i++) {
+                if (this.$options.listStyles.indexOf(classList[i])) {
+                    return classList[i];
+                }
+            }
+            return null;
+        },
+
         /**
          * Suppress events. None of the events will be triggered until you call <code>resumeEvents</code>
          * @returns {List}
