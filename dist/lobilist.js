@@ -465,6 +465,16 @@ $(function () {
             return me;
         },
 
+        getItemPositions: function(){
+            var positions = {};
+            var $items = this.$el.find('.lobilist-item');
+            $items.each(function(ind, item){
+                var $item = $(item);
+                positions[$item.attr('data-id')] = $item.index() + 1;
+            });
+            return positions;
+        },
+
         /**
          * Suppress events. None of the events will be triggered until you call <code>resumeEvents</code>
          * @returns {List}
@@ -1051,16 +1061,6 @@ $(function () {
         getId: function () {
             var me = this;
             return me.$el.data('stateful-id');
-        },
-
-        getItemPositions: function(){
-            var positions = {};
-            var $items = this.$el.find('.lobilist-item');
-            $items.each(function(ind, item){
-                var $item = $(item);
-                positions[$item.attr('data-id')] = $item.index() + 1;
-            });
-            return positions;
         },
 
         /**
