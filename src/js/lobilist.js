@@ -475,6 +475,10 @@ $(function () {
             return positions;
         },
 
+        getTitle: function(){
+            return this.$title.html();
+        },
+
         /**
          * Suppress events. None of the events will be triggered until you call <code>resumeEvents</code>
          * @returns {List}
