@@ -1219,7 +1219,6 @@ $(function () {
         },
 
         getListsPositions: function(){
-            debugger;
             var positions = {};
             var $lists = this.$el.find('.lobilist-wrapper');
             $lists.each(function(ind, wrapper){
