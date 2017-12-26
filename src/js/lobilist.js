@@ -1218,6 +1218,18 @@ $(function () {
             return maxId + 1;
         },
 
+        getListsPositions: function(){
+            debugger;
+            var positions = {};
+            var $lists = this.$el.find('.lobilist-wrapper');
+            $lists.each(function(ind, wrapper){
+                var $list = $(wrapper).find('.lobilist');
+                var list = $list.data('lobiList');
+                positions[list.getId()] = $(wrapper).index() + 1;
+            });
+            return positions;
+        },
+
         /**
          *
          * @param listOptions
