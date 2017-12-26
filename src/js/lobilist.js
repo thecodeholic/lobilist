@@ -8,8 +8,6 @@
  */
 $(function () {
 
-    var LIST_COUNTER = 0;
-
     var StorageLocal = function () {
         var STORAGE_KEY = 'lobilist';
 
@@ -142,7 +140,7 @@ $(function () {
             var me = this;
             me.suppressEvents();
             if (!me.$options.id) {
-                me.$options.id = 'lobilist-list-' + (LIST_COUNTER++);
+                me.$options.id = me.$lobiList.getNextListId();
                 me.$hasGeneratedId = true;
             }
             me.$elWrapper = $('<div class="lobilist-wrapper"></div>');
@@ -1216,6 +1214,26 @@ $(function () {
                 }
             });
             return maxId + 1;
+        },
+
+        /**
+         * Get next id which will be assigned to new item
+         *
+         * @public
+         * @method getNextListId
+         * @returns {Number}
+         */
+        getNextListId: function () {
+            var $lists = this.$el.find('.lobilist');
+            var maxId = 0;
+            $lists.each(function(index, item){
+                var $list = $(item).data('lobiList');
+                if ($list.getId().indexOf('lobilist-list-') === 0 &&
+                    parseInt($list.getId().replace('lobilist-list-')) > maxId){
+                    maxId = parseInt($list.getId().replace('lobilist-list-'));
+                }
+            });
+            return 'lobilist-list-' + (maxId + 1);
         },
 
         getListsPositions: function(){
